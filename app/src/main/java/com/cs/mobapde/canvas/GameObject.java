@@ -24,8 +24,9 @@ public class GameObject {
 
     protected Bitmap sprite;
 
-    public void move(int speedModifier) {
-        xCoord += speed * xVector * speedModifier;
+    public void move(int speedModifier, float timeDelta) {
+        xCoord += speed * xVector * speedModifier * timeDelta;
+        yCoord += speed * yVector * speedModifier * timeDelta;
     }
 
     public boolean isDead() {

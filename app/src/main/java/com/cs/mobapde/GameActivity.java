@@ -47,7 +47,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     float spawnThresh = 5;
     float spawnThreshInc = 5;
     float spawnRate = 1;
-    float shotCooldown = 1;
+    float shotCooldown = (float)0.25;
 
     float timerSlow = 0;
     float timerHaste = 0;
@@ -108,6 +108,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         };
         Timer timer = new Timer("MyTimer");
         timer.scheduleAtFixedRate(timerTask, 1, 1);
+
+        setContentView(gameScreen);
     }
 
     @Override
@@ -265,7 +267,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         gameObjects.add(temp);
                         shots.add(temp);
 
-                        shotCooldown = 1;
+                        shotCooldown = (float)0.25;
                     }
 
                     if (shootGreen == true) {
@@ -273,7 +275,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         gameObjects.add(temp);
                         shots.add(temp);
 
-                        shotCooldown = 1;
+                        shotCooldown = (float)0.25;
                     }
 
                     if (shootBlue == true) {
@@ -281,7 +283,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         gameObjects.add(temp);
                         shots.add(temp);
 
-                        shotCooldown = 1;
+                        shotCooldown = (float)0.25;
                     }
                 }
 
@@ -388,8 +390,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void move(GameObject gameObject) {
-            gameObject.setxCoord(gameObject.getxCoord() + gameObject.getxVector() * gameObject.getSpeed() * timeDelta);
-            gameObject.setyCoord(gameObject.getyCoord() + gameObject.getyVector() * gameObject.getSpeed() * timeDelta);
+            gameObject.move(speedModifier, timeDelta);
         }
 
         public void spawnTarget() {
@@ -485,10 +486,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         this.vectorX = getMinMax(event.values[0] * -0.1, -1.0, 1.0);
         this.vectorY = getMinMax(event.values[1] * -0.1, -1.0, 1.0);
-
-
-        System.out.println("X"+this.vectorX);
-        System.out.println("Y"+this.vectorY);
     }
 
     @Override
@@ -504,4 +501,5 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         return val;
     }
+
 }

@@ -297,6 +297,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
                 }
 
+                player.move(speedModifier, timeDelta);
                 for(int i = 0; i < gameObjects.size(); i++) {
                     move(gameObjects.get(i));
                 }

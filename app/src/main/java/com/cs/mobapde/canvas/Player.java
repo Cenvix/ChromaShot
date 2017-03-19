@@ -10,7 +10,7 @@ import com.cs.mobapde.R;
 
 public class Player extends GameObject {
 
-    private double rotation;
+    private float rotation;
 
     public Player(Resources resources) {
         name = "player";
@@ -31,11 +31,11 @@ public class Player extends GameObject {
         setSprite(new BitmapFactory().decodeResource(resources, R.drawable.player));
     }
 
-    public double getRotation() {
+    public float getRotation() {
         return rotation;
     }
 
-    public void setRotation(double rotation) {
+    public void setRotation(float rotation) {
         this.rotation = rotation;
     }
 }

@@ -223,6 +223,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             canvas.drawBitmap(button2.getSprite(), button2.getxCoord(), button2.getyCoord(), null);
             canvas.drawBitmap(button3.getSprite(), button3.getxCoord(), button3.getyCoord(), null);
 
+            canvas.save(Canvas.MATRIX_SAVE_FLAG); //Saving the canvas and later restoring it so only this image will be rotated.
+            canvas.rotate(player.getRotation());
+            canvas.drawBitmap(player.getSprite(), player.getxCoord(), player.getyCoord(), null);
+            canvas.restore();
+
             for(int i = 0; i < gameObjects.size(); i++) {
                 canvas.drawBitmap(gameObjects.get(i).getSprite(), gameObjects.get(i).getxCoord() - gameObjects.get(i).getWidth()/2, gameObjects.get(i).getyCoord() - gameObjects.get(i).getHeight()/2, null);
             }
@@ -343,7 +348,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             shots = new ArrayList<>();
 
             player = new Player(getResources());
-            gameObjects.add(player);
         }
 
         public void trackPlayer(Target target) {

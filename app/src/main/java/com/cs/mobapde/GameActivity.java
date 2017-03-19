@@ -395,10 +395,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         public void movePlayer(Float xVector, Float yVector) {
 
-            player.setxVector(xVector*player.getSpeed());
-            player.setyVector(yVector*player.getSpeed());
+            player.setxVector(xVector);
+            player.setyVector(yVector);
 
-            player.setRotation( Math.toDegrees(Math.atan2(yVector,xVector)));
+            player.setRotation((float)Math.toDegrees(Math.atan2(yVector,xVector)));
             //System.out.println(player.getRotation());
 
         }

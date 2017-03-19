@@ -256,7 +256,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     speedModifier = 1;
                 }
                 if(timerHaste == 0) {
-                    player.setSpeed(50);
+                    player.setSpeed(30);
                 }
 
                 spawnTarget();
@@ -389,9 +389,13 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
-        public void movePlayer(Float x, Float y) {
-            player.setxCoord(player.getxCoord() + x*player.getSpeed());
-            player.setyCoord(player.getyCoord() + y *player.getSpeed());
+        public void movePlayer(Float xVector, Float yVector) {
+
+            player.setxVector(xVector*player.getSpeed());
+            player.setyVector(yVector*player.getSpeed());
+
+            player.setRotation( Math.toDegrees(Math.atan2(yVector,xVector)));
+            //System.out.println(player.getRotation());
 
         }
 

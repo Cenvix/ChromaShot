@@ -225,7 +225,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
             canvas.save(Canvas.MATRIX_SAVE_FLAG); //Saving the canvas and later restoring it so only this image will be rotated.
             canvas.rotate(player.getRotation());
-            canvas.drawBitmap(player.getSprite(), player.getxCoord(), player.getyCoord(), null);
+            canvas.drawBitmap(player.getSprite(), player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
             canvas.restore();
 
             for(int i = 0; i < gameObjects.size(); i++) {

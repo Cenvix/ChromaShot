@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Mobapde.iml" filepath="$PROJECT_DIR$/Mobapde.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ChromaShot MOBAPPDE.iml" filepath="$PROJECT_DIR$/ChromaShot MOBAPPDE.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

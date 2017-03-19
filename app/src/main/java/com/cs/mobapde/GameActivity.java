@@ -2,6 +2,7 @@ package com.cs.mobapde;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,11 +23,15 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEvent;
+
 /**
  * Created by Vincent on 03/13/2017.
  */
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements SensorEventListener{
 
     GameScreen gameScreen;
     GameLogic gameLogic;
@@ -64,12 +69,23 @@ public class GameActivity extends AppCompatActivity {
     CanvasButton button2;
     CanvasButton button3;
 
+    /* Accelorometer Stuff*/
+    Sensor sensor;
+    SensorManager sensorManager;
+
+    /*Controls*/
+    Double vectorX;
+    Double vectorY;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
         hideActionBar();//This hides actionbar
+
+        initializeSensors();//For Accelerometer
 
         shootRed = false;
         shootGreen = false;
@@ -113,6 +129,7 @@ public class GameActivity extends AppCompatActivity {
         gameScreen.resume();
         gameLogic.resume();
     }
+
 
     public class GameScreen extends SurfaceView implements Runnable, View.OnTouchListener{
 
@@ -443,5 +460,46 @@ public class GameActivity extends AppCompatActivity {
             actionBar.hide();
         }
 
+    }
+
+
+    /** FUNCTIONS FOR ACCELELLOROMETER*/
+
+    public void initializeSensors(){
+
+        //Sensor Manager
+        this.sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
+        //actual Sensor
+        this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        /*Times -1 for Quadrants*/
+
+        this.vectorX = getMinMax(event.values[0] * -0.1, -1.0, 1.0);
+        this.vectorY = getMinMax(event.values[1] * -0.1, -1.0, 1.0);
+
+
+        System.out.println("X"+this.vectorX);
+        System.out.println("Y"+this.vectorY);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    public Double getMinMax(Double val, Double min, Double max){
+        if(val > max)
+            val = max;
+        if(val<min)
+            val = min;
+
+        return val;
     }
 }

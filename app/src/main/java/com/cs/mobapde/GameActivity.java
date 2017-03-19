@@ -41,19 +41,19 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     boolean gameOver = false;
 
-    int time = 0;
-    int randTemp = 0;
-    int spawnThresh = 5;
-    int spawnThreshInc = 5;
-    int spawnRate = 1;
-    int spawnRateChoke = 400;
-    int shotCooldown = 1;
+    float time = 0;
+    float timePrevious = 0;
 
-    int timerSlow = 0;
-    int timerHaste = 0;
-    int timerVoid = 0;
+    float spawnThresh = 5;
+    float spawnThreshInc = 5;
+    float spawnRate = 1;
+    float shotCooldown = 1;
 
-    int score = 0;
+    float timerSlow = 0;
+    float timerHaste = 0;
+    float timerVoid = 0;
+
+    float score = 0;
 
     boolean shootRed;
     boolean shootGreen;
@@ -102,14 +102,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void run() {
                 //System.out.println("TimerTask executing counter is: " + time);
-                time++;
-                shotCooldown--;
+                time += 0.001;
+                shotCooldown -= 0.001;
             }
         };
         Timer timer = new Timer("MyTimer");
-        timer.scheduleAtFixedRate(timerTask, 10, 1000);
-
-        setContentView(gameScreen);
+        timer.scheduleAtFixedRate(timerTask, 1, 1);
     }
 
     @Override
@@ -240,6 +238,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     public class GameLogic implements Runnable {
 
         Thread thread;
+        float timeDelta;
 
         public GameLogic () {
             init();
@@ -248,6 +247,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void run() {
             while(isRunning) {
+                timeDelta = time - timePrevious;
+                timePrevious = time;
+
                 if(timerSlow == 0) {
                     speedModifier = 1;
                 }
@@ -386,8 +388,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void move(GameObject gameObject) {
-            gameObject.setxCoord(gameObject.getxCoord() + gameObject.getxVector() * gameObject.getSpeed());
-            gameObject.setyCoord(gameObject.getyCoord() + gameObject.getyVector() * gameObject.getSpeed());
+            gameObject.setxCoord(gameObject.getxCoord() + gameObject.getxVector() * gameObject.getSpeed() * timeDelta);
+            gameObject.setyCoord(gameObject.getyCoord() + gameObject.getyVector() * gameObject.getSpeed() * timeDelta);
         }
 
         public void spawnTarget() {

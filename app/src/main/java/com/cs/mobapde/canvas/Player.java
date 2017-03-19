@@ -24,7 +24,7 @@ public class Player extends GameObject {
         yCoord = 300;
 
         hp = 1;
-        speed = 8;
+        speed = 300;
         xVector = 0;
         yVector = 0;
 

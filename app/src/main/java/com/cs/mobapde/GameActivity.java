@@ -175,11 +175,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public boolean onTouch(View view, MotionEvent event) {
 
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
             if(isPressingButton(button1, event)) {
                 //SPAWN RED BULLET
@@ -256,7 +256,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     speedModifier = 1;
                 }
                 if(timerHaste == 0) {
-                    player.setSpeed(8);
+                    player.setSpeed(50);
                 }
 
                 spawnTarget();
@@ -389,6 +389,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
+        public void movePlayer(Float x, Float y) {
+            player.setxCoord(player.getxCoord() + x*player.getSpeed());
+            player.setyCoord(player.getyCoord() + y *player.getSpeed());
+
+        }
+
         public void move(GameObject gameObject) {
             gameObject.move(speedModifier, timeDelta);
         }
@@ -485,7 +491,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         /*Times -1 for Quadrants*/
 
         this.vectorX = getMinMax(event.values[0] * -0.1, -1.0, 1.0);
-        this.vectorY = getMinMax(event.values[1] * -0.1, -1.0, 1.0);
+        this.vectorY = getMinMax(event.values[1] * 0.1, -1.0, 1.0);
+
+        gameLogic.movePlayer(Float.parseFloat(this.vectorX.toString()),Float.parseFloat(this.vectorY.toString()));
     }
 
     @Override

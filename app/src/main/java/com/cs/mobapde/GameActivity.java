@@ -256,7 +256,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     speedModifier = 1;
                 }
                 if(timerHaste == 0) {
-                    player.setSpeed(30);
+                    player.setSpeed(1000);
                 }
 
                 spawnTarget();

@@ -14,9 +14,9 @@ public class Shot extends GameObject {
     public Shot(Resources resources, String color, Player player) {
         name = "shot";
 
-        width = 24;
-        height = 24;
-        radius = 12;
+        width = 48;
+        height = 48;
+        radius = 24;
 
         xCoord = player.getxCoord();
         yCoord = player.getyCoord();

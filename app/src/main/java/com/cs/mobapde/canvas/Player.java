@@ -15,9 +15,9 @@ public class Player extends GameObject {
     public Player(Resources resources) {
         name = "player";
 
-        width = 32;
-        height = 32;
-        radius = 16;
+        width = 64;
+        height = 64;
+        radius = 32;
 
         rotation = 0;
         xCoord = 400;
@@ -29,6 +29,16 @@ public class Player extends GameObject {
         yVector = 0;
 
         setSprite(new BitmapFactory().decodeResource(resources, R.drawable.player));
+    }
+
+    public void move(int speedModifier, float timeDelta, int minX, int maxX, int minY, int maxY) {
+        if(xCoord + speed * xVector * speedModifier * timeDelta > minX && xCoord + speed * xVector * speedModifier * timeDelta < maxX) {
+            xCoord += speed * xVector * speedModifier * timeDelta;
+        }
+
+        if(yCoord + speed * yVector * speedModifier * timeDelta > minY && yCoord + speed * yVector * speedModifier * timeDelta < maxY) {
+            yCoord += speed * yVector * speedModifier * timeDelta;
+        }
     }
 
     public float getRotation() {

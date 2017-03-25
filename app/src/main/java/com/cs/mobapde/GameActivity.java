@@ -212,10 +212,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         public void render(Canvas canvas) {
             canvas.drawARGB(255, 255, 255, 255);
 
-            canvas.drawBitmap(button1.getSprite(), button1.getxCoord(), button1.getyCoord(), null);
-            canvas.drawBitmap(button2.getSprite(), button2.getxCoord(), button2.getyCoord(), null);
-            canvas.drawBitmap(button3.getSprite(), button3.getxCoord(), button3.getyCoord(), null);
-
+            drawButtons(canvas);
             drawRotatedPlayer(canvas);
 
             for(int i = 0; i < gameObjects.size(); i++) {
@@ -230,6 +227,20 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             canvas.translate(-player.getxCoord(), -player.getyCoord());
             canvas.drawBitmap(player.getSprite(), player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
             canvas.restore();
+        }
+
+        public void drawButtons(Canvas canvas) {
+            button1.setxCoord(50);
+            button2.setxCoord(50);
+            button3.setxCoord(50);
+
+            button1.setyCoord(canvas.getHeight()/4 - button1.getHeight()/2);
+            button2.setyCoord(canvas.getHeight()/2 - button2.getHeight()/2);
+            button3.setyCoord(canvas.getHeight()*3/4 - button3.getHeight()/2);
+
+            canvas.drawBitmap(button1.getSprite(), button1.getxCoord(), button1.getyCoord(), null);
+            canvas.drawBitmap(button2.getSprite(), button2.getxCoord(), button2.getyCoord(), null);
+            canvas.drawBitmap(button3.getSprite(), button3.getxCoord(), button3.getyCoord(), null);
         }
 
         public boolean isPressingButton(CanvasButton button, MotionEvent event) {
@@ -263,6 +274,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                 if(shotCooldown < 0) {
                     if (shootRed) {
+                        shootRed = false;
                         Shot temp = new Shot(getResources(), "red", player);
                         gameObjects.add(temp);
                         shots.add(temp);
@@ -271,6 +283,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     if (shootGreen) {
+                        shootGreen = false;
                         Shot temp = new Shot(getResources(), "green", player);
                         gameObjects.add(temp);
                         shots.add(temp);
@@ -279,6 +292,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     if (shootBlue) {
+                        shootBlue = false;
                         Shot temp = new Shot(getResources(), "blue", player);
                         gameObjects.add(temp);
                         shots.add(temp);
@@ -297,14 +311,18 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
                 }
 
-                player.move(speedModifier, timeDelta);
+                player.move(speedModifier, timeDelta, 200, gameScreen.getWidth(), 0, gameScreen.getHeight());
                 for(int i = 0; i < gameObjects.size(); i++) {
                     move(gameObjects.get(i));
                 }
 
-                shotAndTargetKillConditions();
+                shotAndTargetCollision();
 
                 for(int i = 0; i < shots.size(); i++) {
+                    if(checkOutOfBounds(shots.get(i))) {
+                        shots.get(i).decrementHp();
+                    }
+
                     if(shots.get(i).isDead()) {
                         gameObjects.remove(shots.get(i));
                         shots.remove(i);
@@ -313,6 +331,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 }
 
                 for(int i = 0; i < targets.size(); i++) {
+                    if(checkOutOfBounds(targets.get(i))) {
+                        targets.get(i).decrementHp();
+                    }
+
                     if(targets.get(i).isDead()) {
                         score = 10 * spawnRate;
                         gameObjects.remove(targets.get(i));
@@ -363,7 +385,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         private boolean checkOutOfBounds(GameObject obj) {
-            return (obj.getxCoord() > gameScreen.getHeight() || obj.getxCoord() < 0 || obj.getyCoord() > gameScreen.getWidth() || obj.getyCoord() < 0);
+            return (obj.getyCoord() > gameScreen.getHeight() || obj.getxCoord() < 200 || obj.getxCoord() > gameScreen.getWidth() || obj.getyCoord() < 0);
         }
 
         private void movePlayer(MotionEvent event) {
@@ -407,7 +429,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                     if(Math.floor(Math.random()*10) % 2 == 0) {
                         if(Math.floor(Math.random()*10) % 2 == 0) {
-                            temp.setxCoord(0);
+                            temp.setxCoord(200);
                             temp.setyCoord((float)Math.floor(Math.random()*gameScreen.getHeight()));
                         }
                         else {
@@ -434,7 +456,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
-        private void shotAndTargetKillConditions() {
+        private void shotAndTargetCollision() {
             for(int i = 0; i < shots.size(); i++) {
                 for(int j = 0; j < targets.size(); j++) {
                     if(circleCollision(shots.get(i), targets.get(j))) {
@@ -447,11 +469,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                             targets.get(j).empower();
                         }
                     }
-
-                    checkOutOfBounds(targets.get(j));
                 }
-
-                checkOutOfBounds(shots.get(i));
             }
         }
     }

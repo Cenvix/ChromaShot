@@ -16,9 +16,9 @@ public class Target extends GameObject {
     public Target(Resources resources) {
         name = "target";
 
-        width = 32;
-        height = 32;
-        radius = 16;
+        width = 64;
+        height = 64;
+        radius = 32;
 
         xCoord = 400;
         yCoord = 300;

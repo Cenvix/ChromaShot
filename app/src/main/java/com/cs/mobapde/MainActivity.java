@@ -1,7 +1,6 @@
 package com.cs.mobapde;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -9,14 +8,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -25,7 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button start, options;
 
 
-    OptionsActivity optionsActivity;
+    OptionsActivity optionsActivity = null;
+    DifficultyActivity difficultyActivity = null;
     LayoutInflater inflater;
 
     @Override
@@ -54,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+        inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        initiateOptions();
+
     }
 
     @Override
@@ -61,11 +62,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(view.equals(options)){
 //            Intent intent = new Intent(MainActivity.this, OptionsActivity.class);
 //            startActivity(intent);
-            initiateOptions();
+
+            optionsActivity.show();
         }
         else if(view.equals(start)){
-            Intent intent = new Intent(MainActivity.this, DifficultyActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(MainActivity.this, DifficultyActivity.class);
+//            startActivity(intent);
+            difficultyActivity.show();
+
+            //initiateDifficulty();
         }
     }
 
@@ -79,19 +84,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initiateOptions(){
 
-         inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //Inflate the view from a predefined XML layout
-        View layout = (ViewGroup)inflater.inflate(R.layout.activity_options,null);
-        // create a 300px width and 470px height PopupWindow
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
         int height = size.y;
 
-        optionsActivity = new OptionsActivity(layout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
-        // display the popup in the center
 
-    }
+        View optionLayout = (ViewGroup)inflater.inflate(R.layout.activity_options,null);
+        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
+
+       View difficultyLayout = (ViewGroup)inflater.inflate(R.layout.activity_difficulty,null);
+        difficultyActivity = new DifficultyActivity(this,difficultyLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
+
+
+   }
 }

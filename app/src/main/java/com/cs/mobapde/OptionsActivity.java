@@ -21,17 +21,18 @@ import android.widget.TextView;
 
 public class OptionsActivity extends PopupWindow implements View.OnTouchListener {
 
-    View parent;
+    Context parent;
+    RelativeLayout parentLayout;
 
-    public OptionsActivity(View layout, RelativeLayout relativeLayout,int width, int height){
+    public OptionsActivity(Context parent,View layout, RelativeLayout relativeLayout,int width, int height){
 
 
 
 
         super(layout,(int)(width*.9),(int)(width*.8),true);
 
-        this.parent  = layout;
-
+        this.parent  = parent;
+        this.parentLayout = relativeLayout;
 
         this.setElevation(24);
         this.setAnimationStyle(android.R.style.Animation_InputMethod);
@@ -40,17 +41,14 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
         this.setOutsideTouchable(true);
         this.setTouchInterceptor(this);
 
-        parent.setOnTouchListener(this);
+        layout.setOnTouchListener(this);
 
 
-        showAtLocation(relativeLayout,Gravity.CENTER,0,0);
+        //showAtLocation(relativeLayout,Gravity.CENTER,0,0);
     }
 
-    protected void setPopWindow(){
-        //DisplayMetrics dm = new DisplayMetrics();
-        //getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-    //    getWindow().setLayout((int)(dm.widthPixels*.5),(int)(dm.heightPixels*.5));
+    public void show(){
+        showAtLocation(parentLayout, Gravity.CENTER,0,0);
     }
 
     @Override

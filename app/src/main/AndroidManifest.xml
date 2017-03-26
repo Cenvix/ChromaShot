@@ -28,6 +28,11 @@
             android:theme="@style/AppTheme.CustomPopTheme">
 
         </activity>
+
+        <activity   android:name=".GameOverActivity"
+            android:theme="@style/AppTheme.CustomPopTheme">
+
+        </activity>
     </application>
 
 </manifest>

@@ -1,12 +1,19 @@
 package com.cs.mobapde;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,6 +26,7 @@ import com.cs.mobapde.canvas.Powerup;
 import com.cs.mobapde.canvas.Shot;
 import com.cs.mobapde.canvas.Target;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,11 +34,17 @@ import java.util.TimerTask;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity implements SensorEventListener{
 
     GameScreen gameScreen;
     GameLogic gameLogic;
+
+    LayoutInflater inflater;
+    GameOverActivity gameOverActivity;
 
     boolean isRunning;
     int speedModifier = 1;
@@ -79,6 +93,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+//        initializePopUps();
+
         hideActionBar();//This hides actionbar
 
         initializeSensors();//For Accelerometer
@@ -126,6 +142,36 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         gameLogic.resume();
     }
 
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                if(data.getStringExtra("result").equals("retry")) {
+                    player.setHp(1);
+                    this.gameLogic.init();
+                }
+                else if(data.getStringExtra("result").equals("home"))
+                    finish();
+            }
+        }
+    }
+
+//    public void initializePopUps(){
+//
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int width = size.x;
+//        int height = size.y;
+//
+//
+//        inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View gameOverLayout = (ViewGroup)inflater.inflate(R.layout.activity_game_over,null);
+//        gameOverActivity = new GameOverActivity(this,gameOverLayout,(RelativeLayout)findViewById(R.id.activity_game),width,height);
+//
+//
+//    }
+
     public class GameScreen extends SurfaceView implements Runnable, View.OnTouchListener{
 
         Thread thread;
@@ -166,6 +212,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             thread.start();
         }
 
+
+
         @Override
         public boolean onTouch(View view, MotionEvent event) {
 
@@ -203,7 +251,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
             else {
-                gameLogic.movePlayer(event);
+              //  gameLogic.movePlayer(event);
             }
 
             return true;
@@ -230,13 +278,13 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void drawButtons(Canvas canvas) {
-            button1.setxCoord(50);
-            button2.setxCoord(50);
-            button3.setxCoord(50);
+            button1.setyCoord(canvas.getHeight()-150);
+            button2.setyCoord(canvas.getHeight()-150);
+            button3.setyCoord(canvas.getHeight()-150);
 
-            button1.setyCoord(canvas.getHeight()/4 - button1.getHeight()/2);
-            button2.setyCoord(canvas.getHeight()/2 - button2.getHeight()/2);
-            button3.setyCoord(canvas.getHeight()*3/4 - button3.getHeight()/2);
+            button1.setxCoord(canvas.getWidth()/4 - button1.getWidth()/2);
+            button2.setxCoord(canvas.getWidth()/2 - button2.getWidth()/2);
+            button3.setxCoord(canvas.getWidth()*3/4 - button3.getWidth()/2);
 
             canvas.drawBitmap(button1.getSprite(), button1.getxCoord(), button1.getyCoord(), null);
             canvas.drawBitmap(button2.getSprite(), button2.getxCoord(), button2.getyCoord(), null);
@@ -267,7 +315,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     speedModifier = 1;
                 }
                 if(timerHaste == 0) {
-                    player.setSpeed(1000);
+                    player.setSpeed(500);
                 }
 
                 spawnTarget();
@@ -306,12 +354,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                     if(circleCollision(player, targets.get(i))) {
                         Log.v("COLLISION", "Player and Target");
-                        targets.get(i).decrementHp();
+                        //targets.get(i).decrementHp();
                         player.decrementHp();
                     }
                 }
 
-                player.move(speedModifier, timeDelta, 200, gameScreen.getWidth(), 0, gameScreen.getHeight());
+                player.move(speedModifier, timeDelta, 0, gameScreen.getWidth(), 0, gameScreen.getHeight()-200);
                 for(int i = 0; i < gameObjects.size(); i++) {
                     move(gameObjects.get(i));
                 }
@@ -336,11 +384,30 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     if(targets.get(i).isDead()) {
-                        score = 10 * spawnRate;
+                        score += 10 * spawnRate;
                         gameObjects.remove(targets.get(i));
                         targets.remove(i);
                         i--;
                     }
+                }
+
+                if(player.isDead()){
+                    //TODO ADD Game over screen
+//                    Handler handler = new Handler(Looper.getMainLooper());
+//
+//                    handler.postDelayed(new Runnable() {
+//                       @Override
+//                        public void run() {
+//
+//                            GameActivity.this.gameOverActivity.show((SurfaceView)GameActivity.this.findViewById(R.id.mainCanvas));
+//                        }
+//                    }, 1000 );
+//                    pause();
+
+                    Intent i = new Intent(GameActivity.this,GameOverActivity.class);
+
+                    i.putExtra("score", score+"");
+                    startActivityForResult(i,1);
                 }
             }
         }
@@ -385,7 +452,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         private boolean checkOutOfBounds(GameObject obj) {
-            return (obj.getyCoord() > gameScreen.getHeight() || obj.getxCoord() < 200 || obj.getxCoord() > gameScreen.getWidth() || obj.getyCoord() < 0);
+            return (obj.getyCoord() > gameScreen.getHeight()-200 || obj.getxCoord() < 0 || obj.getxCoord() > gameScreen.getWidth() || obj.getyCoord() < 0);
         }
 
         private void movePlayer(MotionEvent event) {
@@ -429,7 +496,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                     if(Math.floor(Math.random()*10) % 2 == 0) {
                         if(Math.floor(Math.random()*10) % 2 == 0) {
-                            temp.setxCoord(200);
+                            temp.setxCoord(0);
                             temp.setyCoord((float)Math.floor(Math.random()*gameScreen.getHeight()));
                         }
                         else {
@@ -443,7 +510,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                             temp.setxCoord((float)Math.floor(Math.random()*gameScreen.getWidth()));
                         }
                         else {
-                            temp.setyCoord(gameScreen.getHeight()-50);
+                            temp.setyCoord(gameScreen.getHeight()-250);
                             temp.setxCoord((float)Math.floor(Math.random()*gameScreen.getWidth()));
                         }
                     }
@@ -482,6 +549,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     /** FUNCTIONS FOR ACCELELLOROMETER*/
 
     public void initializeSensors(){
@@ -498,8 +569,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         /*Times -1 for Quadrants*/
-        this.vectorX = getMinMax(event.values[0] * -0.1, -1.0, 1.0);
-        this.vectorY = getMinMax(event.values[1] * 0.1, -1.0, 1.0);
+        this.vectorX = getMinMax(event.values[0] * -0.5, -1.0, 1.0);
+        this.vectorY = getMinMax(event.values[1] * 0.5, -1.0, 1.0);
 
         gameLogic.movePlayer(Float.parseFloat(this.vectorX.toString()),Float.parseFloat(this.vectorY.toString()));
     }
@@ -517,4 +588,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         return val;
     }
+
+
 }

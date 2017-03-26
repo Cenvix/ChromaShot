@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        initiateOptions();
+
+        initiatePopUps();
 
     }
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void initiateOptions(){
+    public void initiatePopUps(){
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -91,10 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int height = size.y;
 
 
+        inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View optionLayout = (ViewGroup)inflater.inflate(R.layout.activity_options,null);
-        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
+        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.mainCanvas),width,height);
 
-       View difficultyLayout = (ViewGroup)inflater.inflate(R.layout.activity_difficulty,null);
+        View difficultyLayout = (ViewGroup)inflater.inflate(R.layout.activity_difficulty,null);
         difficultyActivity = new DifficultyActivity(this,difficultyLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
 
 

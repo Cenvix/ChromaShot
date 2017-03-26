@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_difficulty"
+    android:id="@+id/activity_options"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/splat"
-    android:backgroundTint="@color/GreenAqua"
+    android:background="@drawable/img_paper_bg3"
+    android:backgroundTint="@color/RedDark"
     android:backgroundTintMode="multiply"
     android:elevation="10dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -16,43 +16,47 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/game_over"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="Choose Difficulty"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:layout_above="@+id/btn_easy"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp" />
-
-    <Button
-        android:id="@+id/btn_easy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/btn_medium"
-        android:backgroundTint="@color/colorPrimary"
         android:layout_centerVertical="true"
-        android:text="Easy" />
+        android:fontFamily="sans-serif"
+        android:text="Gameover"
+        android:textAlignment="center"
+        android:textColor="@color/White"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btn_medium"
+    <TextView
+        android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/Green"
-        android:text="Medium"
-        android:layout_below="@+id/btn_easy"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_below="@+id/game_over"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:fontFamily="sans-serif"
+        android:text="Score:"
+        android:textAlignment="center"
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btn_hard"
+        android:id="@+id/btn_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/RedDark"
-        android:text="Hard"
-        android:layout_below="@+id/btn_medium"
-        android:layout_alignStart="@+id/btn_medium" />
+        android:layout_alignStart="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:text="Home" />
+
+    <Button
+        android:id="@+id/btn_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/score"
+        android:layout_centerHorizontal="true"
+        android:text="Retry" />
+
 
 </RelativeLayout>

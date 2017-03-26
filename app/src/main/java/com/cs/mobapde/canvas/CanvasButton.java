@@ -25,8 +25,8 @@ public class CanvasButton {
 
     public CanvasButton(Resources resources, String color) {
         this.color = color;
-        this.width = 128;
-        this.height = 128;
+        this.width = 150;
+        this.height = 150;
 
         switch(color) {
             case "red":

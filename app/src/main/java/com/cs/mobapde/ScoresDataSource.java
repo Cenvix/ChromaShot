@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,6 +57,21 @@ public class ScoresDataSource {
     }
 
     public List<Scores> queryAllScores(){
+        List<Scores> scores = new ArrayList<Scores>();
+
+        Cursor cursor = database.query(DatabaseHelper.TABLE_SCORES,allColumns, null, null,
+                null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            Scores score = cursorToScore(cursor);
+            scores.add(score);
+            cursor.moveToNext();
+        }
+
+
+
+        cursor.close();
+        return scores;
 
 
     }

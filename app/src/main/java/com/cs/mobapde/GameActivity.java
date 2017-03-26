@@ -427,6 +427,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void init() {
+
+            score = 0;
             gameObjects = new ArrayList<>();
             targets = new ArrayList<>();
             shots = new ArrayList<>();

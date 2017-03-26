@@ -32,31 +32,44 @@
         android:id="@+id/score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/game_over"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:fontFamily="sans-serif"
         android:text="Score:"
         android:textAlignment="center"
         android:textColor="@color/White"
         android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/game_over"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/highscore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/score"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:fontFamily="sans-serif"
+        android:text="High Score:"
+        android:textAlignment="center"
+        android:textColor="@color/White"
+        android:textSize="10sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/btn_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button3"
-        android:layout_below="@+id/button3"
         android:text="Home" />
 
     <Button
         android:id="@+id/btn_retry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/score"
-        android:layout_centerHorizontal="true"
-        android:text="Retry" />
+        android:text="Retry"
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/highscore"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

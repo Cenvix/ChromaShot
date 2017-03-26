@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View optionLayout = (ViewGroup)inflater.inflate(R.layout.activity_options,null);
-        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.mainCanvas),width,height);
+        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
 
         View difficultyLayout = (ViewGroup)inflater.inflate(R.layout.activity_difficulty,null);
         difficultyActivity = new DifficultyActivity(this,difficultyLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);

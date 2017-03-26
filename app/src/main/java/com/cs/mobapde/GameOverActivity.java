@@ -22,8 +22,9 @@ public class GameOverActivity extends Activity implements View.OnTouchListener, 
 
     GameActivity parent;
 
+    ScoresDataSource dataSource;
 
-    TextView score;
+    TextView score,highscore;
     Button retry, home;
 
     @Override
@@ -35,8 +36,24 @@ public class GameOverActivity extends Activity implements View.OnTouchListener, 
         retry = (Button) findViewById(R.id.btn_retry);
         home = (Button) findViewById(R.id.btn_home);
         score = (TextView) findViewById(R.id.score);
+        highscore = (TextView) findViewById(R.id.highscore);
 
-        score.setText("Score: "+getIntent().getStringExtra("score"));
+        String myScore = getIntent().getStringExtra("score");
+        score.setText("Score: "+myScore);
+
+
+
+        dataSource = new ScoresDataSource(this);
+        dataSource.open();
+
+
+        Float f =Float.parseFloat(myScore);
+
+
+        dataSource.addScore(Math.round(f));
+
+        highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
+
 
         retry.setOnClickListener(this);
         home.setOnClickListener(this);

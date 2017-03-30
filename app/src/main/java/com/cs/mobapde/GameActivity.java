@@ -434,6 +434,24 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             shots = new ArrayList<>();
 
             player = new Player(getResources());
+
+            speedModifier = 1;
+
+            gameOver = false;
+
+            time = 0;
+            timePrevious = 0;
+
+            spawnThresh = 5;
+            spawnThreshInc = 5;
+            spawnRate = 1;
+            shotCooldown = (float)0.25;
+
+            timerSlow = 0;
+            timerHaste = 0;
+            timerVoid = 0;
+
+            score = 0;
         }
 
         private void trackPlayer(Target target) {

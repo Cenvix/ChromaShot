@@ -4,10 +4,16 @@
     <color name="colorPrimaryDark">#a31621</color>
     <color name="colorAccent">#FF4081</color>
     <color name="Green">#56e39f</color>
-    <color name="Red">#ef6f6c</color>
-    <color name="White">#fff9f9</color>
+    <color name="Red">#fffb71</color>
+    <color name="White">#000000</color>
     <color name="GreenDark">#5b6c5d</color>
     <color name="GreenAqua">#59c9a5</color>
     <color name="RedDark">#a31621</color>
     <color name="BlueDark">#0b132b</color>
+    <color name="Cyan">#5fd9d7</color>
+    <color name="Yellow">#fffdb3</color>
+    <color name="Black">#000000</color>
+    <color name="WhtieOverlay">#9fffffff</color>
+    <color name="Whtie">#ffffff</color>
+    <color name="magenta">#66de4fe2</color>
 </resources>

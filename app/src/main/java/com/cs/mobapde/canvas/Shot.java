@@ -22,7 +22,7 @@ public class Shot extends GameObject {
         yCoord = player.getyCoord();
 
         hp = 1;
-        speed = 400;
+        speed = 1000;
         xVector = (float)Math.cos((player.getRotation())*(Math.PI/180));
         yVector = (float)Math.sin((player.getRotation())*(Math.PI/180));
 

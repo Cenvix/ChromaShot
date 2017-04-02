@@ -1,5 +1,6 @@
 package com.cs.mobapde;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -12,7 +13,9 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button start, options;
 
     TextView highscore;
-
+    ValueAnimator animator;
 
     OptionsActivity optionsActivity = null;
     LayoutInflater inflater;
@@ -61,13 +64,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
+
         dataSource = new ScoresDataSource(this);
         dataSource.open();
+
 
         highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
 
         initiatePopUps();
 
+        final ImageView background = (ImageView) findViewById(R.id.background);
+
+        animator = ValueAnimator.ofFloat(0.0f, 1.0f);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(200000L);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                final float progress = (float) animation.getAnimatedValue();
+                final float height = 2160+1080;
+                final float translationX = height * progress;
+                background.setScrollY((int)translationX);
+
+            }
+        });
+        animator.start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
+
+        animator.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        animator.end();
     }
 
     @Override

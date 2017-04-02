@@ -4,15 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -26,7 +22,6 @@ import com.cs.mobapde.canvas.Powerup;
 import com.cs.mobapde.canvas.Shot;
 import com.cs.mobapde.canvas.Target;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,9 +29,6 @@ import java.util.TimerTask;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity implements SensorEventListener{
 
@@ -80,8 +72,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     CanvasButton button3;
 
     /* Accelorometer Stuff*/
-    Sensor sensor;
+    Sensor accelerometer;
+    Sensor magnetometer;
     SensorManager sensorManager;
+
+    float[] accelOutput;
+    float[] magnetOutput;
+
+    float[] orientation= new float[3];
+    float[] startOrientation;
+
+    float startNegation = 1;
 
     /*Controls*/
     Double vectorX;
@@ -122,11 +123,15 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         timer.scheduleAtFixedRate(timerTask, 1, 1);
 
         setContentView(gameScreen);
+
+        startOrientation=null;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        pauseSensors();
 
         isRunning = false;
         gameScreen.pause();
@@ -136,6 +141,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
+
+        registerSensors();
 
         isRunning = true;
         gameScreen.resume();
@@ -315,7 +322,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     speedModifier = 1;
                 }
                 if(timerHaste == 0) {
-                    player.setSpeed(500);
+                    player.setSpeed(3000);
                 }
 
                 spawnTarget();
@@ -433,6 +440,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             targets = new ArrayList<>();
             shots = new ArrayList<>();
 
+
             player = new Player(getResources());
 
             speedModifier = 1;
@@ -452,6 +460,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             timerVoid = 0;
 
             score = 0;
+
+
         }
 
         private void trackPlayer(Target target) {
@@ -580,19 +590,72 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         this.sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 
         //actual Sensor
-        this.sensor = this.sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        this.accelerometer = this.sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        this.magnetometer = this.sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
+        registerSensors();
+
+    }
+
+    public void registerSensors(){
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    public void pauseSensors(){
+        this.sensorManager.unregisterListener(this);
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         /*Times -1 for Quadrants*/
-        this.vectorX = getMinMax(event.values[0] * -0.5, -1.0, 1.0);
-        this.vectorY = getMinMax(event.values[1] * 0.5, -1.0, 1.0);
 
-        gameLogic.movePlayer(Float.parseFloat(this.vectorX.toString()),Float.parseFloat(this.vectorY.toString()));
+
+        if(event.sensor.getType() == Sensor.TYPE_GRAVITY){
+            accelOutput = event.values;
+
+            //System.out.println("A");
+        }
+        else if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD ){
+            magnetOutput = event.values;
+            //System.out.println("M");
+        }
+
+
+
+        if(accelOutput!=null&&magnetOutput!=null){
+            float[] R = new float[9];
+            float[] I = new float[9];
+            boolean success = SensorManager.getRotationMatrix(R,I,accelOutput,magnetOutput);
+
+
+
+            if(success){
+                SensorManager.getOrientation(R,this.orientation);
+                if(startOrientation==null){
+                    startOrientation = new float[orientation.length];
+                    System.arraycopy(orientation,0,startOrientation,0, orientation.length);
+
+//                    reCalibrate();
+                }
+            }
+        }
+
+        if(orientation!=null&&startOrientation!=null){
+            float pitch = orientation[1]-startOrientation[1]; //pi to -pi
+            float roll = (orientation[2]-startOrientation[2]); // pi/2 o -pi/2
+
+
+//            System.out.println("Pitch = " +pitch);
+//            System.out.println("Roll = " +roll);
+
+                        this.vectorX = getMinMax(roll/Math.PI , -1.0, 1.0);
+                       this.vectorY = getMinMax(-pitch/Math.PI, -1.0, 1.0);
+
+
+            gameLogic.movePlayer(Float.parseFloat(this.vectorX.toString()),Float.parseFloat(this.vectorY.toString()));
+        }
     }
 
     @Override
@@ -608,6 +671,16 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         return val;
     }
+
+//    public void reCalibrate(){
+////        Log.e("RECALIBRATE",startOrientation[0]+" "+ startOrientation[1]+ " "+startOrientation[2]);
+//
+//        if(startOrientation[0]>=0){
+//            startNegation = 1;
+//        }
+//        else
+//            startNegation=-1;
+//    }
 
 
 }

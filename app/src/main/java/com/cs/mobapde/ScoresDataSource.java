@@ -56,6 +56,11 @@ public class ScoresDataSource {
 
     }
 
+    public void deleteAllScores(){
+        database.delete(DatabaseHelper.TABLE_SCORES,null, null );
+
+    }
+
     public List<Scores> queryAllScores(){
         List<Scores> scores = new ArrayList<Scores>();
 
@@ -80,7 +85,7 @@ public class ScoresDataSource {
         List<Scores> scores = new ArrayList<Scores>();
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_SCORES,allColumns, null, null,
-                null, null,DatabaseHelper.COLUMN_SCORE);
+                null, null,DatabaseHelper.COLUMN_SCORE + " DESC ");
 
 
         cursor.moveToFirst();
@@ -93,7 +98,14 @@ public class ScoresDataSource {
 
 
         cursor.close();
-        return scores.get(scores.size()-1);
+
+        if(scores.size()>0)
+            return scores.get(0);
+        else{
+            Scores s = new Scores();
+            s.setScore(0);
+            return s;
+        }
 
 
     }
@@ -106,7 +118,6 @@ public class ScoresDataSource {
         score.setId(cursor.getInt(0));
         score.setScore(cursor.getInt(1));
 
-        System.out.println(cursor.getInt(1));
 
         return score;
 

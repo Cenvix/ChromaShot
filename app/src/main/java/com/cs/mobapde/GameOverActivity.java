@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -31,6 +32,10 @@ public class GameOverActivity extends Activity implements View.OnTouchListener, 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_over);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        getWindow().setLayout((int)Math.round(dm.widthPixels*.8),(int)Math.round(dm.heightPixels*.6));
 
 
         retry = (Button) findViewById(R.id.btn_retry);

@@ -5,9 +5,6 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/long_bg"
-    android:backgroundTint="@color/Cyan"
-    android:backgroundTintMode="multiply"
     tools:context="com.cs.chromashot.MainActivity">
 
 

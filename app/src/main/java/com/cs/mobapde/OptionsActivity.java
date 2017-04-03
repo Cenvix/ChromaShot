@@ -44,7 +44,10 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
         layout.setOnTouchListener(this);
 
 
+
+
         //showAtLocation(relativeLayout,Gravity.CENTER,0,0);
+
     }
 
     public void show(){

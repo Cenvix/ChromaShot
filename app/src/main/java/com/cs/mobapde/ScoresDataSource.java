@@ -32,19 +32,27 @@ public class ScoresDataSource {
 
 
     public Scores addScore(int score){
-        ContentValues values = new ContentValues();
+        Scores top = this.queryTopScore();
 
-        values.put(DatabaseHelper.COLUMN_SCORE, score);
-        long insertId = database.insert(DatabaseHelper.TABLE_SCORES,null,values);
+        if(top.getScore()<score) {
 
-        Cursor cursor = database.query(DatabaseHelper.TABLE_SCORES,allColumns,
-                DatabaseHelper.SCORE_ID + " = " +insertId, null, null, null, null);
+            deleteScore(top);
 
-        cursor.moveToFirst();
-        Scores newScore = cursorToScore(cursor);
-        cursor.close();
+            ContentValues values = new ContentValues();
 
-        return  null;
+            values.put(DatabaseHelper.COLUMN_SCORE, score);
+            long insertId = database.insert(DatabaseHelper.TABLE_SCORES, null, values);
+
+            Cursor cursor = database.query(DatabaseHelper.TABLE_SCORES, allColumns,
+                    DatabaseHelper.SCORE_ID + " = " + insertId, null, null, null, null);
+
+            cursor.moveToFirst();
+            Scores newScore = cursorToScore(cursor);
+            cursor.close();
+
+        }
+            return null;
+
 
     }
 

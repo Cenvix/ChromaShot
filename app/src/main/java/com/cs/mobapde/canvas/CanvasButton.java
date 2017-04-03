@@ -23,26 +23,26 @@ public class CanvasButton {
 
     private Bitmap sprite;
 
-    public CanvasButton(Resources resources, String color) {
+    public CanvasButton(Resources resources, String color, int width) {
         this.color = color;
-        this.width = 150;
+        this.width = width;
         this.height = 150;
 
         switch(color) {
             case "red":
                 xCoord = 20;
                 yCoord = 20;
-                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.button_red), width, height, true);
+                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.magenta_btn), width, height, true);
                 break;
             case "green":
                 xCoord = 20;
                 yCoord = 120;
-                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.button_green), width, height, true);
+                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.yellow_btn), width, height, true);
                 break;
             case "blue":
                 xCoord = 20;
                 yCoord = 220;
-                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.button_blue ), width, height, true);
+                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.cyan_btn ), width, height, true);
                 break;
         }
     }

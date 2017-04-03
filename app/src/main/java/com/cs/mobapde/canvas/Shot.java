@@ -30,13 +30,13 @@ public class Shot extends GameObject {
 
         switch(color) {
             case "red":
-                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_red));
+                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_magenta));
                 break;
             case "blue":
-                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_blue));
+                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_cyan));
                 break;
             case "green":
-                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_green));
+                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_yellow));
                 break;
         }
     }

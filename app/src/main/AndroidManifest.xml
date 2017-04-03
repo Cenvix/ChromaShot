@@ -25,7 +25,7 @@
 
         <activity
             android:name=".GameOverActivity"
-            android:theme="@style/AppTheme.CustomPopTheme">
+            android:theme="@style/AppTheme.GameOverPopUp">
 
         </activity>
     </application>

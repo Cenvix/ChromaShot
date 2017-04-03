@@ -3,11 +3,14 @@ package com.cs.mobapde;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -104,10 +107,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         shootGreen = false;
         shootBlue = false;
 
-        button1 = new CanvasButton(getResources(), "red");
-        button2 = new CanvasButton(getResources(), "green");
-        button3 = new CanvasButton(getResources(), "blue");
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
+        button1 = new CanvasButton(getResources(), "red",(int)(dm.widthPixels*.33));
+        button2 = new CanvasButton(getResources(), "green",(int)(dm.widthPixels*.33));
+        button3 = new CanvasButton(getResources(), "blue",(int)(dm.widthPixels*.33));
         gameLogic = new GameLogic();
         gameScreen = new GameScreen(this);
 
@@ -157,8 +162,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     player.setHp(1);
                     this.gameLogic.init();
                 }
-                else if(data.getStringExtra("result").equals("home"))
+                else if(data.getStringExtra("result").equals("home")) {
+                    player.setHp(10);
                     finish();
+                }
             }
         }
     }
@@ -289,13 +296,16 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             button2.setyCoord(canvas.getHeight()-150);
             button3.setyCoord(canvas.getHeight()-150);
 
-            button1.setxCoord(canvas.getWidth()/4 - button1.getWidth()/2);
-            button2.setxCoord(canvas.getWidth()/2 - button2.getWidth()/2);
-            button3.setxCoord(canvas.getWidth()*3/4 - button3.getWidth()/2);
+            button1.setxCoord(0);
+            button2.setxCoord((int)(canvas.getWidth()/2)-(button2.getWidth()/2));
+            button3.setxCoord(canvas.getWidth()-button3.getWidth());
 
             canvas.drawBitmap(button1.getSprite(), button1.getxCoord(), button1.getyCoord(), null);
             canvas.drawBitmap(button2.getSprite(), button2.getxCoord(), button2.getyCoord(), null);
             canvas.drawBitmap(button3.getSprite(), button3.getxCoord(), button3.getyCoord(), null);
+
+
+
         }
 
         public boolean isPressingButton(CanvasButton button, MotionEvent event) {
@@ -435,6 +445,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         public void init() {
 
+            startOrientation = null;
             score = 0;
             gameObjects = new ArrayList<>();
             targets = new ArrayList<>();
@@ -443,6 +454,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
             player = new Player(getResources());
 
+            speedModifier = 1;
             speedModifier = 1;
 
             gameOver = false;
@@ -460,6 +472,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             timerVoid = 0;
 
             score = 0;
+
 
 
         }
@@ -607,6 +620,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
+    public boolean is180=false;
+    public int mark180 = 0;
     @Override
     public void onSensorChanged(SensorEvent event) {
         /*Times -1 for Quadrants*/
@@ -643,6 +658,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         if(orientation!=null&&startOrientation!=null){
+
             float pitch = orientation[1]-startOrientation[1]; //pi to -pi
             float roll = (orientation[2]-startOrientation[2]); // pi/2 o -pi/2
 
@@ -650,8 +666,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 //            System.out.println("Pitch = " +pitch);
 //            System.out.println("Roll = " +roll);
 
-                        this.vectorX = getMinMax(roll/Math.PI , -1.0, 1.0);
-                       this.vectorY = getMinMax(-pitch/Math.PI, -1.0, 1.0);
+
+            this.vectorX = getMinMax(roll / Math.PI, -1.0, 1.0);
+            this.vectorY = getMinMax(-pitch / Math.PI, -1.0, 1.0);
 
 
             gameLogic.movePlayer(Float.parseFloat(this.vectorX.toString()),Float.parseFloat(this.vectorY.toString()));

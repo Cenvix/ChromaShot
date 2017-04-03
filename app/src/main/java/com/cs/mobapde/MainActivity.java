@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Locale;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataSource = new ScoresDataSource(this);
         dataSource.open();
 
+        //dataSource.deleteAllScores();
 
         highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
 
@@ -78,13 +80,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         animator = ValueAnimator.ofFloat(0.0f, 1.0f);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(200000L);
+        animator.setDuration(100000L);
+        Random r = new Random();
+        final int startRand = r.nextInt(1080)%1080;
+        animator.setCurrentPlayTime(100000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 final float progress = (float) animation.getAnimatedValue();
                 final float height = 2160+1080;
-                final float translationX = height * progress;
+                final float translationX = height * progress + startRand;
                 background.setScrollY((int)translationX);
 
             }
@@ -103,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        animator.cancel();
     }
 
     @Override

@@ -50,8 +50,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     float time = 0;
     float timePrevious = 0;
 
-    float spawnThresh = 5;
-    float spawnThreshInc = 5;
+    float spawnThresh = 1;
     float spawnRate = 1;
     float shotCooldown = (float)0.25;
 
@@ -337,11 +336,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 timeDelta = time - timePrevious;
                 timePrevious = time;
 
-                if(timerSlow == 0) {
+                if(timerSlow <= 0) {
                     speedModifier = 1;
                 }
-                if(timerHaste == 0) {
-                    player.setSpeed(3000);
+                if(timerHaste <= 0) {
+                    player.setSpeed(300);
                 }
 
                 spawnTarget();
@@ -507,8 +506,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             time = 0;
             timePrevious = 0;
 
-            spawnThresh = 5;
-            spawnThreshInc = 5;
+            spawnThresh = 1;
             spawnRate = 1;
             shotCooldown = (float)0.25;
 
@@ -571,16 +569,16 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         private void spawnTarget() {
-            if(time > spawnThresh) {
-                if(spawnThreshInc < 2) {
-                    spawnRate++;
-                    spawnThreshInc = 5;
+            if(targets.size() < spawnThresh) {
+                if(spawnRate > 6) {
+                    spawnThresh++;
+                    spawnRate = 1;
                 }
                 else {
-                    spawnThreshInc--;
+                    spawnRate++;
                 }
 
-                for(int i = 0; i < spawnRate; i++) {
+                for (int i = 0; i < spawnRate; i++) {
                     Target temp = new Target(getResources());
 
                     if(Math.floor(Math.random()*10) % 2 == 0) {
@@ -604,11 +602,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         }
                     }
 
-                    targets.add(temp);
                     gameObjects.add(temp);
+                    targets.add(temp);
                 }
-
-                spawnThresh += spawnThreshInc;
             }
         }
 

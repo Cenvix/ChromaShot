@@ -27,7 +27,7 @@ public class Powerup extends GameObject{
         xVector = 0;
         yVector = 0;
 
-        int randTemp = (int) Math.floor(Math.random()*3);
+        int randTemp = (int) Math.floor(Math.random()*4);
 
         if(randTemp == 0) {
             name = "shield";

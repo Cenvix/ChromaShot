@@ -38,6 +38,8 @@ public class Shot extends GameObject {
             case "green":
                 setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_yellow));
                 break;
+            case "chroma":
+                setSprite(new BitmapFactory().decodeResource(resources, R.drawable.target_black));
         }
     }
 

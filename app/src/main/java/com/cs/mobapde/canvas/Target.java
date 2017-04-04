@@ -52,6 +52,6 @@ public class Target extends GameObject {
     }
 
     public void empower() {
-        speed = (float)(speed + 0.00005);
+        speed = (float)(speed + 50);
     }
 }

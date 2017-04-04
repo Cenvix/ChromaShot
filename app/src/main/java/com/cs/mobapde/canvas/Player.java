@@ -31,7 +31,7 @@ public class Player extends GameObject {
         setSprite(new BitmapFactory().decodeResource(resources, R.drawable.player));
     }
 
-    public void move(int speedModifier, float timeDelta, int minX, int maxX, int minY, int maxY) {
+    public void move(float speedModifier, float timeDelta, int minX, int maxX, int minY, int maxY) {
         if(xCoord + speed * xVector * speedModifier * timeDelta > minX && xCoord + speed * xVector * speedModifier * timeDelta < maxX) {
             xCoord += speed * xVector * speedModifier * timeDelta;
         }

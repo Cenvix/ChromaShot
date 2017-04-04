@@ -24,7 +24,7 @@ public class GameObject {
 
     protected Bitmap sprite;
 
-    public void move(int speedModifier, float timeDelta) {
+    public void move(float speedModifier, float timeDelta) {
         xCoord += speed * xVector * speedModifier * timeDelta;
         yCoord += speed * yVector * speedModifier * timeDelta;
     }

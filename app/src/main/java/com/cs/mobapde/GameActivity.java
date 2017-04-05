@@ -169,7 +169,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     this.gameLogic.init();
                 }
                 else if(data.getStringExtra("result").equals("home")) {
-                    player.setHp(10);
+                    finish();
+                }
+                else{
                     finish();
                 }
             }
@@ -201,7 +203,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         public GameScreen(Context context) {
             super(context);
 
-            bg = new BitmapFactory().decodeResource(getResources(), R.drawable.long_bg);
+//            bg = new BitmapFactory().decodeResource(getResources(), R.drawable.long_bg3);
 
             this.setOnTouchListener(this);
             surfaceHolder = getHolder();
@@ -283,7 +285,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         public void render(Canvas canvas) {
             canvas.drawARGB(255, 255, 255, 255);
 
-            canvas.drawBitmap(bg, 0, 0, null);
+            //canvas.drawBitmap(bg, 0, 0, null);
 
             drawButtons(canvas);
             drawRotatedPlayer(canvas);
@@ -467,11 +469,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 //                    }, 1000 );
 //                    pause();
 
+                    gameOver=true;
+
+                }
+                if(gameOver){
+                    isRunning=false;
                     Intent i = new Intent(GameActivity.this,GameOverActivity.class);
 
                     i.putExtra("score", score+"");
                     startActivityForResult(i,1);
                 }
+
             }
         }
 

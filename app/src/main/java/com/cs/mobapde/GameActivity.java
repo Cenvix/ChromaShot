@@ -724,8 +724,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             float roll = (orientation[2]-startOrientation[2]); // pi/2 o -pi/2
 
 
-//            System.out.println("Pitch = " +pitch);
-//            System.out.println("Roll = " +roll);
+            System.out.println("Pitch = " +pitch);
+            System.out.println("Roll = " +roll);
 
 
             this.vectorX = getMinMax(roll / Math.PI, -1.0, 1.0);

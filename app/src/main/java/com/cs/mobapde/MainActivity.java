@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Random r = new Random();
 
 
-        int startRand = r.nextInt(1080)%1080 + dm.widthPixels * r.nextInt(5)* ((r.nextInt()==0)?-1:1);
+        int startRand = r.nextInt(1080)%1080 + dm.widthPixels * r.nextInt(5)* ((r.nextInt()%2==0)?-1:1);
 
         background.setScrollY(startRand);
     }

@@ -44,7 +44,7 @@ public class OptionDataSource {
 
     }
 
-    private Options cursorToComment(Cursor cursor) {
+    private Options cursorToOption(Cursor cursor) {
         Options options = new Options();
         options.setId(cursor.getInt(0));
         options.setOption(cursor.getString(1));

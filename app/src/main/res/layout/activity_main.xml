@@ -13,9 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:cropToPadding="false"
-        android:scaleType="matrix"
+        android:scaleType="centerCrop"
         android:scrollY="0dp"
-        android:src="@drawable/long_bg2" />
+        android:src="@drawable/long_bg2_2" />
 
 
 

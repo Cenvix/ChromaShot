@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button start, options;
 
+    ImageView background;
     TextView highscore;
     ValueAnimator animator;
 
@@ -75,40 +77,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initiatePopUps();
 
-        final ImageView background = (ImageView) findViewById(R.id.background);
+        background = (ImageView) findViewById(R.id.background);
 
-        animator = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(100000L);
-        Random r = new Random();
-        final int startRand = r.nextInt(1080)%1080;
-        animator.setCurrentPlayTime(100000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                final float progress = (float) animation.getAnimatedValue();
-                final float height = 2160+1080;
-                final float translationX = height * progress + startRand;
-                background.setScrollY((int)translationX);
+        background.setOnClickListener(this);
+        randBG();
 
-            }
-        });
-        animator.start();
+//        animator = ValueAnimator.ofFloat(0.0f, 1.0f);
+//        animator.setRepeatCount(ValueAnimator.INFINITE);
+//        animator.setInterpolator(new LinearInterpolator());
+//        animator.setDuration(100000L);
+//        Random r = new Random();
+//        final int startRand = r.nextInt(1080)%1080;
+//        animator.setCurrentPlayTime(100000);
+//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                final float progress = (float) animation.getAnimatedValue();
+//                final float height = 2160+1080;
+//                final float translationX = height * progress + startRand;
+//                background.setScrollY((int)translationX);
+//
+//            }
+//        });
+//        animator.start();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
-
-        animator.start();
+        randBG();
+        //animator.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        animator.pause();
+        //animator.start();
+    }
+
+    protected void randBG(){
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        Random r = new Random();
+
+
+        int startRand = r.nextInt(1080)%1080 + dm.widthPixels * r.nextInt(5)* ((r.nextInt()==0)?-1:1);
+
+        background.setScrollY(startRand);
     }
 
     @Override
@@ -123,6 +139,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(MainActivity.this, GameActivity.class);
             this.startActivity(intent);
         }
+        else
+            randBG();
     }
 
     public void hideActionBar(){

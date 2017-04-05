@@ -42,6 +42,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     LayoutInflater inflater;
     GameOverActivity gameOverActivity;
 
+    DisplayMetrics dm;
+
     boolean isRunning;
     float speedModifier = 1;
 
@@ -109,7 +111,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         shootGreen = false;
         shootBlue = false;
 
-        DisplayMetrics dm = new DisplayMetrics();
+        dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         button1 = new CanvasButton(getResources(), "red",(int)(dm.widthPixels*.33));
@@ -203,8 +205,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         public GameScreen(Context context) {
             super(context);
 
-//            bg = new BitmapFactory().decodeResource(getResources(), R.drawable.long_bg3);
 
+            bg = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.long_bg4), dm.widthPixels, dm.heightPixels, true);
             this.setOnTouchListener(this);
             surfaceHolder = getHolder();
         }
@@ -285,7 +287,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         public void render(Canvas canvas) {
             canvas.drawARGB(255, 255, 255, 255);
 
-            //canvas.drawBitmap(bg, 0, 0, null);
+            canvas.drawBitmap(bg, 0, 0, null);
 
             drawButtons(canvas);
             drawRotatedPlayer(canvas);
@@ -342,7 +344,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     speedModifier = 1;
                 }
                 if(timerHaste <= 0) {
-                    player.setSpeed(300);
+                    player.setSpeed(3000);
                 }
 
                 spawnTarget();
@@ -402,7 +404,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         }
                         else if(powerups.get(i).getName().equals("haste")) {
                             timerHaste = 5;
-                            player.setSpeed(600);
+                            player.setSpeed(6000);
                         }
                         else if(powerups.get(i).getName().equals("void")) {
                             timerVoid = 5;
@@ -475,7 +477,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 if(gameOver){
                     isRunning=false;
                     Intent i = new Intent(GameActivity.this,GameOverActivity.class);
-
                     i.putExtra("score", score+"");
                     startActivityForResult(i,1);
                 }

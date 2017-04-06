@@ -52,8 +52,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     float time = 0;
     float timePrevious = 0;
 
+    int numOfEnemies = 0;
+
     float spawnThresh = 1;
     float spawnRate = 1;
+    float spawnWaveTimer = 5;
     float shotCooldown = (float)0.25;
 
     float powerupTimer = 10;
@@ -130,6 +133,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 timerHaste -= 0.001;
                 timerVoid -= 0.001;
                 powerupTimer -= 0.001;
+                spawnWaveTimer -= 0.001;
             }
         };
         Timer timer = new Timer("MyTimer");
@@ -394,7 +398,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     if(powerups.get(i).isDead()) {
-                        Log.v("POWERUP", "GOT: " + powerups.get(i).getName());
                         if(powerups.get(i).getName().equals("shield")) {
                             player.setHp(2);
                         }
@@ -420,7 +423,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     trackPlayer(targets.get(i));
 
                     if(pointCircleCollision(player, targets.get(i))) {
-                        Log.v("COLLISION", "Player and Target");
                         targets.get(i).decrementHp();
                         player.decrementHp();
                     }
@@ -451,9 +453,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     if(targets.get(i).isDead()) {
-                        score += 10 * spawnRate;
+                        score += 10 * spawnThresh;
                         gameObjects.remove(targets.get(i));
                         targets.remove(i);
+                        numOfEnemies--;
                         i--;
                     }
                 }
@@ -518,6 +521,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             spawnThresh = 1;
             spawnRate = 1;
             shotCooldown = (float)0.25;
+            numOfEnemies = 0;
 
             timerSlow = 0;
             timerHaste = 0;
@@ -578,7 +582,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         private void spawnTarget() {
-            if(targets.size() < spawnThresh) {
+            if(targets.size() < spawnThresh && spawnWaveTimer <= 0) {
+                spawnWaveTimer = 3;
+
                 if(spawnRate > 6) {
                     spawnThresh++;
                     spawnRate = 1;

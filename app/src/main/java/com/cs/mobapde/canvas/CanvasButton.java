@@ -23,12 +23,15 @@ public class CanvasButton {
 
     private Bitmap sprite;
 
-    public CanvasButton(Resources resources, String color, int width) {
-        this.color = color;
+    private boolean visible;
+
+    public CanvasButton(Resources resources, String type, int width) {
+        this.color = type;
         this.width = width;
         this.height = 150;
+        this.visible = true;
 
-        switch(color) {
+        switch(type) {
             case "red":
                 xCoord = 20;
                 yCoord = 20;
@@ -44,6 +47,28 @@ public class CanvasButton {
                 yCoord = 220;
                 sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.cyan_btn ), width, height, true);
                 break;
+            case "pause":
+                xCoord = 0;
+                yCoord = 0;
+                width = 128;
+                height = 128;
+                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.pause), width, height, true);
+                break;
+            case "resume":
+                xCoord = 0;
+                yCoord = 0;
+                width = 128;
+                height = 128;
+                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.resume), width, height, true);
+                visible = false;
+                break;
+            case "home":
+                xCoord = 150;
+                yCoord = 0;
+                width = 128;
+                height = 128;
+                sprite = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(resources, R.drawable.home), width, height, true);
+                visible = false;
         }
     }
 
@@ -85,5 +110,13 @@ public class CanvasButton {
 
     public void setSprite(Bitmap sprite) {
         this.sprite = sprite;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

@@ -20,7 +20,7 @@ public class Powerup extends GameObject{
         radius = 24;
 
         xCoord = new Random().nextFloat()*maxX;
-        yCoord = new Random().nextFloat()*maxY;
+        yCoord = new Random().nextFloat()*maxY-150;
 
         hp = 1;
         speed = 0;

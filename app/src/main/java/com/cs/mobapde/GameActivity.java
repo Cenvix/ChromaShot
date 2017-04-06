@@ -52,8 +52,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     float time = 0;
     float timePrevious = 0;
 
-    int numOfEnemies = 0;
-
     float spawnThresh = 1;
     float spawnRate = 1;
     float spawnWaveTimer = 5;
@@ -80,6 +78,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     CanvasButton button1;
     CanvasButton button2;
     CanvasButton button3;
+
+    Bitmap effectHaste;
+    Bitmap effectShield;
+    Bitmap effectChroma;
 
     /* Accelorometer Stuff*/
     Sensor accelerometer;
@@ -113,6 +115,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         shootRed = false;
         shootGreen = false;
         shootBlue = false;
+
+        effectShield = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_shield), 64, 64, true);
+        effectHaste = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_haste), 64, 64, true);
+        effectChroma = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_chroma), 64, 64, true);
 
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -307,6 +313,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             canvas.rotate(player.getRotation());
             canvas.translate(-player.getxCoord(), -player.getyCoord());
             canvas.drawBitmap(player.getSprite(), player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
+
+            if(player.getHp() == 2) {
+                canvas.drawBitmap(effectShield, player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
+            }
+            if(timerHaste > 0) {
+                canvas.drawBitmap(effectHaste, player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
+            }
+            if(timerVoid > 0) {
+                canvas.drawBitmap(effectChroma, player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
+            }
+
             canvas.restore();
         }
 
@@ -456,7 +473,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         score += 10 * spawnThresh;
                         gameObjects.remove(targets.get(i));
                         targets.remove(i);
-                        numOfEnemies--;
                         i--;
                     }
                 }
@@ -520,8 +536,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
             spawnThresh = 1;
             spawnRate = 1;
+            spawnWaveTimer = 3;
             shotCooldown = (float)0.25;
-            numOfEnemies = 0;
 
             timerSlow = 0;
             timerHaste = 0;

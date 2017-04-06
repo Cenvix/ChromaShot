@@ -25,13 +25,14 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button start, options;
+    Button start, options, howTo;
 
     ImageView background;
     TextView highscore;
     ValueAnimator animator;
 
     OptionsActivity optionsActivity = null;
+    HowToActivity howToActivity = null;
     LayoutInflater inflater;
     ScoresDataSource dataSource;
 
@@ -59,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         options = (Button)findViewById(R.id.options_btn);
         options.setOnClickListener(this);
         options.setTypeface(typeface);
+
+        howTo = (Button)findViewById(R.id.how_to_btn);
+        howTo.setOnClickListener(this);
+        howTo.setTypeface(typeface);
 
 
         highscore = (TextView)findViewById(R.id.main_highscore);
@@ -138,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(view.equals(start)){
             Intent intent = new Intent(MainActivity.this, GameActivity.class);
             this.startActivity(intent);
+        } else if(view.equals(howTo)){
+            Intent intent = new Intent(MainActivity.this, HowToActivity.class);
+            this.startActivity(intent);
         }
         else
             randBG();
@@ -163,6 +171,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View optionLayout = (ViewGroup)inflater.inflate(R.layout.activity_options,null);
         optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
+
+//        inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View howToLayout = (ViewGroup)inflater.inflate(R.layout.activity_how_to,null);
+//        howToActivity = new HowToActivity(this,howToLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
 
    }
 }

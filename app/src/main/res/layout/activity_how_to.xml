@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_how_to"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/long_bg4"
+    android:elevation="10dp"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+
+    <TextView
+        android:id="@+id/how_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif"
+        android:text="How To Play"
+        android:textAlignment="center"
+        android:textColor="@color/White"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/image_1"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_below="@+id/how_to"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/tut_tilt" />
+
+    <ImageView
+        android:id="@+id/image_2"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignStart="@+id/image_1"
+        android:layout_below="@+id/text_1"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/tut_shoot" />
+
+    <ImageView
+        android:id="@+id/image_3"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignStart="@+id/image_2"
+        android:layout_below="@+id/text_2"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/tut_power" />
+
+    <TextView
+        android:id="@+id/text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="TILT your phone to move your character."
+        android:textColor="@color/Black" />
+
+    <TextView
+        android:id="@+id/text_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="SHOOT the enemies with the right color."
+        android:textColor="@color/Black" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GET Power ups to help you SURVIVE"
+        android:textColor="@color/Black"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/image_3"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

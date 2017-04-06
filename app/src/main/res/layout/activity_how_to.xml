@@ -17,15 +17,15 @@
         android:id="@+id/how_to"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="sans-serif"
         android:text="How To Play"
         android:textAlignment="center"
         android:textColor="@color/White"
         android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:id="@+id/image_1"
@@ -43,6 +43,8 @@
         android:layout_alignStart="@+id/image_1"
         android:layout_below="@+id/text_1"
         android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         app:srcCompat="@drawable/tut_shoot" />
 
     <ImageView

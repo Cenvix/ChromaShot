@@ -45,6 +45,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     DisplayMetrics dm;
 
     boolean isRunning;
+    boolean gamePause;
     float speedModifier = 1;
 
     boolean gameOver = false;
@@ -78,6 +79,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     CanvasButton button1;
     CanvasButton button2;
     CanvasButton button3;
+    CanvasButton pause;
+    CanvasButton resume;
+    CanvasButton home;
 
     Bitmap effectHaste;
     Bitmap effectShield;
@@ -99,7 +103,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     /*Controls*/
     Double vectorX;
     Double vectorY;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +129,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         button1 = new CanvasButton(getResources(), "red",(int)(dm.widthPixels*.33));
         button2 = new CanvasButton(getResources(), "green",(int)(dm.widthPixels*.33));
         button3 = new CanvasButton(getResources(), "blue",(int)(dm.widthPixels*.33));
+        pause = new CanvasButton(getResources(), "pause", 150);
+        resume = new CanvasButton(getResources(), "resume", 150);
+        home = new CanvasButton(getResources(), "home", 150);
+
         gameLogic = new GameLogic();
         gameScreen = new GameScreen(this);
 
@@ -133,13 +140,15 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void run() {
                 //System.out.println("TimerTask executing counter is: " + time);
-                time += 0.001;
-                shotCooldown -= 0.001;
-                timerSlow -= 0.001;
-                timerHaste -= 0.001;
-                timerVoid -= 0.001;
-                powerupTimer -= 0.001;
-                spawnWaveTimer -= 0.001;
+                if(!gamePause) {
+                    time += 0.001;
+                    shotCooldown -= 0.001;
+                    timerSlow -= 0.001;
+                    timerHaste -= 0.001;
+                    timerVoid -= 0.001;
+                    powerupTimer -= 0.001;
+                    spawnWaveTimer -= 0.001;
+                }
             }
         };
         Timer timer = new Timer("MyTimer");
@@ -249,8 +258,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             thread.start();
         }
 
-
-
         @Override
         public boolean onTouch(View view, MotionEvent event) {
 
@@ -291,20 +298,46 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                gameLogic.movePlayer(event);
             }
 
+            if(isPressingButton(pause, event) && gamePause == false) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Log.v("PAUSE", "PAUSING");
+                    gamePause = true;
+                    pause.setVisible(false);
+                    resume.setVisible(true);
+                    home.setVisible(true);
+                }
+            }
+            else if(isPressingButton(resume, event) && gamePause == true) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Log.v("PAUSE", "RESUME");
+                    gamePause = false;
+                    resume.setVisible(false);
+                    home.setVisible(false);
+                    pause.setVisible(true);
+                }
+            }
+            else if(isPressingButton(home, event) && gamePause == true) {
+                //TODO Vincent please insert main menu thing here
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Log.v("PAUSE", "GOING TO MENU");
+                    finish();
+                }
+            }
+
+
             return true;
         }
 
         public void render(Canvas canvas) {
             canvas.drawARGB(255, 255, 255, 255);
-
             canvas.drawBitmap(bg, 0, 0, null);
-
-            drawButtons(canvas);
-            drawRotatedPlayer(canvas);
 
             for(int i = 0; i < gameObjects.size(); i++) {
                 canvas.drawBitmap(gameObjects.get(i).getSprite(), gameObjects.get(i).getxCoord() - gameObjects.get(i).getWidth()/2, gameObjects.get(i).getyCoord() - gameObjects.get(i).getHeight()/2, null);
             }
+
+            drawButtons(canvas);
+            drawRotatedPlayer(canvas);
         }
 
         public void drawRotatedPlayer(Canvas canvas) {
@@ -331,14 +364,30 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             button1.setyCoord(canvas.getHeight()-150);
             button2.setyCoord(canvas.getHeight()-150);
             button3.setyCoord(canvas.getHeight()-150);
+            resume.setyCoord(canvas.getHeight()/2-resume.getHeight());
+            home.setyCoord(canvas.getHeight()/2-home.getHeight());
 
             button1.setxCoord(0);
             button2.setxCoord((int)(canvas.getWidth()/2)-(button2.getWidth()/2));
             button3.setxCoord(canvas.getWidth()-button3.getWidth());
+            resume.setxCoord(canvas.getWidth()/2 - resume.getWidth());
+            home.setxCoord(canvas.getWidth()/2);
 
             canvas.drawBitmap(button1.getSprite(), button1.getxCoord(), button1.getyCoord(), null);
             canvas.drawBitmap(button2.getSprite(), button2.getxCoord(), button2.getyCoord(), null);
             canvas.drawBitmap(button3.getSprite(), button3.getxCoord(), button3.getyCoord(), null);
+
+            if(pause.isVisible()) {
+                canvas.drawBitmap(pause.getSprite(), pause.getxCoord(), pause.getyCoord(), null);
+            }
+
+            if(resume.isVisible()) {
+                canvas.drawBitmap(resume.getSprite(), resume.getxCoord(), resume.getyCoord(), null);
+            }
+
+            if(home.isVisible()) {
+                canvas.drawBitmap(home.getSprite(), home.getxCoord(), home.getyCoord(), null);
+            }
         }
 
         public boolean isPressingButton(CanvasButton button, MotionEvent event) {
@@ -358,127 +407,125 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void run() {
             while(isRunning) {
-                timeDelta = time - timePrevious;
-                timePrevious = time;
 
-                if(timerSlow <= 0) {
-                    speedModifier = 1;
-                }
-                if(timerHaste <= 0) {
-                    player.setSpeed(3000);
-                }
+                if(!gamePause) {
+                    timeDelta = time - timePrevious;
+                    timePrevious = time;
 
-                spawnTarget();
-                spawnPowerup();
-
-                if(shotCooldown < 0) {
-                    if(timerVoid > 0) {
-                        Shot temp = new Shot(getResources(), "chroma", player);
-                        gameObjects.add(temp);
-                        shots.add(temp);
-
-                        shotCooldown = (float) 0.25;
+                    if (timerSlow <= 0) {
+                        speedModifier = 1;
                     }
-                    else {
-                        if (shootRed) {
-                            shootRed = false;
-                            Shot temp = new Shot(getResources(), "red", player);
+                    if (timerHaste <= 0) {
+                        player.setSpeed(3000);
+                    }
+
+                    spawnTarget();
+                    spawnPowerup();
+
+                    if (shotCooldown < 0) {
+                        if (timerVoid > 0) {
+                            Shot temp = new Shot(getResources(), "chroma", player);
                             gameObjects.add(temp);
                             shots.add(temp);
 
                             shotCooldown = (float) 0.25;
+                        } else {
+                            if (shootRed) {
+                                shootRed = false;
+                                Shot temp = new Shot(getResources(), "red", player);
+                                gameObjects.add(temp);
+                                shots.add(temp);
+
+                                shotCooldown = (float) 0.25;
+                            }
+
+                            if (shootGreen) {
+                                shootGreen = false;
+                                Shot temp = new Shot(getResources(), "green", player);
+                                gameObjects.add(temp);
+                                shots.add(temp);
+
+                                shotCooldown = (float) 0.25;
+                            }
+
+                            if (shootBlue) {
+                                shootBlue = false;
+                                Shot temp = new Shot(getResources(), "blue", player);
+                                gameObjects.add(temp);
+                                shots.add(temp);
+
+                                shotCooldown = (float) 0.25;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < powerups.size(); i++) {
+                        if (pointCircleCollision(player, powerups.get(i))) {
+                            powerups.get(i).decrementHp();
                         }
 
-                        if (shootGreen) {
-                            shootGreen = false;
-                            Shot temp = new Shot(getResources(), "green", player);
-                            gameObjects.add(temp);
-                            shots.add(temp);
+                        if (powerups.get(i).isDead()) {
+                            if (powerups.get(i).getName().equals("shield")) {
+                                player.setHp(2);
+                            } else if (powerups.get(i).getName().equals("slow")) {
+                                timerSlow = 5;
+                                speedModifier = (float) 0.5;
+                            } else if (powerups.get(i).getName().equals("haste")) {
+                                timerHaste = 5;
+                                player.setSpeed(6000);
+                            } else if (powerups.get(i).getName().equals("void")) {
+                                timerVoid = 5;
+                            }
 
-                            shotCooldown = (float) 0.25;
+                            gameObjects.remove(powerups.get(i));
+                            powerups.remove(powerups.get(i));
+                            i--;
+                        }
+                    }
+
+                    for (int i = 0; i < targets.size(); i++) {
+                        trackPlayer(targets.get(i));
+
+                        if (pointCircleCollision(player, targets.get(i))) {
+                            targets.get(i).decrementHp();
+                            player.decrementHp();
+                        }
+                    }
+
+                    player.move(speedModifier, timeDelta, 0, gameScreen.getWidth(), 0, gameScreen.getHeight() - 200);
+                    for (int i = 0; i < gameObjects.size(); i++) {
+                        gameObjects.get(i).move(speedModifier, timeDelta);
+                    }
+
+                    shotAndTargetCollision();
+
+                    for (int i = 0; i < shots.size(); i++) {
+                        if (checkOutOfBounds(shots.get(i))) {
+                            shots.get(i).decrementHp();
                         }
 
-                        if (shootBlue) {
-                            shootBlue = false;
-                            Shot temp = new Shot(getResources(), "blue", player);
-                            gameObjects.add(temp);
-                            shots.add(temp);
-
-                            shotCooldown = (float) 0.25;
+                        if (shots.get(i).isDead()) {
+                            gameObjects.remove(shots.get(i));
+                            shots.remove(i);
+                            i--;
                         }
                     }
-                }
 
-                for(int i = 0; i < powerups.size(); i++) {
-                    if(pointCircleCollision(player, powerups.get(i))) {
-                        powerups.get(i).decrementHp();
-                    }
-
-                    if(powerups.get(i).isDead()) {
-                        if(powerups.get(i).getName().equals("shield")) {
-                            player.setHp(2);
-                        }
-                        else if(powerups.get(i).getName().equals("slow")) {
-                            timerSlow = 5;
-                            speedModifier = (float)0.5;
-                        }
-                        else if(powerups.get(i).getName().equals("haste")) {
-                            timerHaste = 5;
-                            player.setSpeed(6000);
-                        }
-                        else if(powerups.get(i).getName().equals("void")) {
-                            timerVoid = 5;
+                    for (int i = 0; i < targets.size(); i++) {
+                        if (checkOutOfBounds(targets.get(i))) {
+                            targets.get(i).decrementHp();
                         }
 
-                        gameObjects.remove(powerups.get(i));
-                        powerups.remove(powerups.get(i));
-                        i--;
-                    }
-                }
-
-                for(int i = 0; i < targets.size(); i++) {
-                    trackPlayer(targets.get(i));
-
-                    if(pointCircleCollision(player, targets.get(i))) {
-                        targets.get(i).decrementHp();
-                        player.decrementHp();
-                    }
-                }
-
-                player.move(speedModifier, timeDelta, 0, gameScreen.getWidth(), 0, gameScreen.getHeight()-200);
-                for(int i = 0; i < gameObjects.size(); i++) {
-                    gameObjects.get(i).move(speedModifier, timeDelta);
-                }
-
-                shotAndTargetCollision();
-
-                for(int i = 0; i < shots.size(); i++) {
-                    if(checkOutOfBounds(shots.get(i))) {
-                        shots.get(i).decrementHp();
+                        if (targets.get(i).isDead()) {
+                            score += 10 * spawnThresh;
+                            gameObjects.remove(targets.get(i));
+                            targets.remove(i);
+                            i--;
+                        }
                     }
 
-                    if(shots.get(i).isDead()) {
-                        gameObjects.remove(shots.get(i));
-                        shots.remove(i);
-                        i--;
-                    }
-                }
-
-                for(int i = 0; i < targets.size(); i++) {
-                    if(checkOutOfBounds(targets.get(i))) {
-                        targets.get(i).decrementHp();
-                    }
-
-                    if(targets.get(i).isDead()) {
-                        score += 10 * spawnThresh;
-                        gameObjects.remove(targets.get(i));
-                        targets.remove(i);
-                        i--;
-                    }
-                }
-
-                if(player.isDead()){
-                    //TODO ADD Game over screen
+                    if (player.isDead()) {
+                        //TODO ADD Game over screen
 //                    Handler handler = new Handler(Looper.getMainLooper());
 //
 //                    handler.postDelayed(new Runnable() {
@@ -490,16 +537,16 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 //                    }, 1000 );
 //                    pause();
 
-                    gameOver=true;
+                        gameOver = true;
 
+                    }
+                    if (gameOver) {
+                        isRunning = false;
+                        Intent i = new Intent(GameActivity.this, GameOverActivity.class);
+                        i.putExtra("score", score + "");
+                        startActivityForResult(i, 1);
+                    }
                 }
-                if(gameOver){
-                    isRunning=false;
-                    Intent i = new Intent(GameActivity.this,GameOverActivity.class);
-                    i.putExtra("score", score+"");
-                    startActivityForResult(i,1);
-                }
-
             }
         }
 

@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         dataSource = new ScoresDataSource(this);
-        dataSource.open();
+
 
         //dataSource.deleteAllScores();
 
-        highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
+        setHighscore();
 
         initiatePopUps();
 
@@ -110,9 +110,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
+        setHighscore();
         randBG();
         //animator.start();
+    }
+
+    public void setHighscore(){
+        dataSource.open();
+        highscore.setText("HighScore: "+dataSource.queryTopScore().getScore());
+        dataSource.close();
     }
 
     @Override

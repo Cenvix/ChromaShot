@@ -49,4 +49,14 @@
         android:elegantTextHeight="false"
         android:text="Music" />
 
+    <Button
+        android:id="@+id/reset_btn"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Highscore"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="42dp" />
+
 </RelativeLayout>

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorEventListener;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -101,6 +102,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     Double vectorY;
 
 
+    MediaPlayer bgm;
+    boolean isBGMStop = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +152,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         setContentView(gameScreen);
 
         startOrientation=null;
+
+        initSounds();
     }
 
     @Override
@@ -155,6 +161,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         super.onPause();
 
         pauseSensors();
+
+        if(isBGMStop)
+        this.bgm.stop();
 
         isRunning = false;
         gameScreen.pause();
@@ -167,9 +176,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         registerSensors();
 
+        if(isBGMStop)
+            initSounds();
+        isBGMStop = true;
+
         isRunning = true;
         gameScreen.resume();
         gameLogic.resume();
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -181,9 +195,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     this.gameLogic.init();
                 }
                 else if(data.getStringExtra("result").equals("home")) {
+                    bgm.stop();
                     finish();
                 }
                 else{
+                    bgm.stop();
                     finish();
                 }
             }
@@ -288,7 +304,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
             else {
-               gameLogic.movePlayer(event);
+               //gameLogic.movePlayer(event);
             }
 
             return true;
@@ -494,7 +510,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                 }
                 if(gameOver){
+                    isBGMStop=false;
                     isRunning=false;
+
                     Intent i = new Intent(GameActivity.this,GameOverActivity.class);
                     i.putExtra("score", score+"");
                     startActivityForResult(i,1);
@@ -513,6 +531,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void resume() {
+
             thread = new Thread(this);
             thread.start();
         }
@@ -783,4 +802,13 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 //    }
 
 
+    /**
+     * MUSIC AND SOUND
+     */
+
+    public void initSounds(){
+        this.bgm = MediaPlayer.create(this,R.raw.bgm_special_spotlight);
+        this.bgm.setLooping(true);
+        this.bgm.start();
+    }
 }

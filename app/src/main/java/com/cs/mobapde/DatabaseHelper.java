@@ -16,15 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final String SCORE_ID = "_id";
     public  static final String COLUMN_SCORE = "score";
 
-    public static final String TABLE_SOUND= "sound";
-    public static final String SOUND_ID = "_id";
-    public  static final String COLUMN_SOUND = "value";
-
-    public static final String TABLE_MUSIC= "music";
-    public static final String MUSIC_ID = "_id";
-    public  static final String COLUMN_MUSIC = "value";
-
-
 
     public static final String TABLE_OPTIONS = "options";
     public static final String OPTION_ID = "_id";

@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     HowToActivity howToActivity = null;
     LayoutInflater inflater;
     ScoresDataSource dataSource;
+    OptionDataSource optionDataSource;
+
 
     MediaPlayer bgm;
 

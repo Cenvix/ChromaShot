@@ -483,7 +483,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     for (int i = 0; i < powerups.size(); i++) {
-                        if (pointCircleCollision(player, powerups.get(i))) {
+                        if (circleCollision(player, powerups.get(i))) {
                             powerups.get(i).decrementHp();
                         }
 

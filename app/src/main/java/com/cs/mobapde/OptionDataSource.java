@@ -67,8 +67,8 @@ public class OptionDataSource {
 
     }
 
-    public List<Options> initializeOptions(){
-        List<Options> options = new ArrayList<Options>();
+    public ArrayList<Options> initializeOptions(){
+        ArrayList<Options> options = new ArrayList<Options>();
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_OPTIONS,allColumns, null, null,
                 null, null, null);

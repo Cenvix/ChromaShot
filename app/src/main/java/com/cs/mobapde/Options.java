@@ -41,4 +41,9 @@ public class Options {
     public String toString() {
         return option;
     }
+
+    public boolean isOn(){
+        if(value>=1)return true;
+        else return false;
+    }
 }

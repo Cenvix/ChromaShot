@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ScoresDataSource dataSource;
     OptionDataSource optionDataSource;
 
+    ArrayList<Options> optionsList;
 
     MediaPlayer bgm;
 
@@ -111,6 +113,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        });
 //        animator.start();
+        optionDataSource = new OptionDataSource(this);
+        optionsList = optionDataSource.initializeOptions();
+
+        
+
         initSounds();
 
     }

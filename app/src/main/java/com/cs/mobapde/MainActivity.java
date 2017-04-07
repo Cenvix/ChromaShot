@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +37,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LayoutInflater inflater;
     ScoresDataSource dataSource;
     OptionDataSource optionDataSource;
+
+
+    MediaPlayer bgm;
+
+    boolean isPause =true;
 
 
     @Override
@@ -73,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-
-
         dataSource = new ScoresDataSource(this);
 
 
@@ -107,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        });
 //        animator.start();
+        initSounds();
+
     }
 
     @Override
@@ -114,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         setHighscore();
         randBG();
+        if(isPause)
+        this.initSounds();
+        isPause = true;
         //animator.start();
     }
 
@@ -126,6 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+
+        if(isPause)
+        this.bgm.stop();
         //animator.start();
     }
 
@@ -152,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(MainActivity.this, GameActivity.class);
             this.startActivity(intent);
         } else if(view.equals(howTo)){
+            isPause = false;
             Intent intent = new Intent(MainActivity.this, HowToActivity.class);
             this.startActivity(intent);
         }
@@ -184,5 +197,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        View howToLayout = (ViewGroup)inflater.inflate(R.layout.activity_how_to,null);
 //        howToActivity = new HowToActivity(this,howToLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
 
+   }
+
+   public void initSounds(){
+       this.bgm = MediaPlayer.create(this,R.raw.bgm_laser_groove);
+       this.bgm.setLooping(true);
+       this.bgm.start();
    }
 }

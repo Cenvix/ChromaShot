@@ -87,6 +87,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     Bitmap effectHaste;
     Bitmap effectShield;
     Bitmap effectChroma;
+    Bitmap effectSlow;
 
     /* Accelorometer Stuff*/
     Sensor accelerometer;
@@ -118,8 +119,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 //        initializePopUps();
 
         hideActionBar();//This hides actionbar
-
         initializeSensors();//For Accelerometer
+
+        dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         shootRed = false;
         shootGreen = false;
@@ -128,9 +131,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         effectShield = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_shield), 64, 64, true);
         effectHaste = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_haste), 64, 64, true);
         effectChroma = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_chroma), 64, 64, true);
-
-        dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        effectSlow = Bitmap.createScaledBitmap(new BitmapFactory().decodeResource(getResources(), R.drawable.effect_slow), dm.widthPixels, dm.heightPixels-200, true);
 
         button1 = new CanvasButton(getResources(), "red",(int)(dm.widthPixels*.33));
         button2 = new CanvasButton(getResources(), "green",(int)(dm.widthPixels*.33));
@@ -355,6 +356,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             }
 
             drawButtons(canvas);
+
+            if(timerSlow > 0) {
+                canvas.drawBitmap(effectSlow, 0, 0, null);
+            }
+
             drawRotatedPlayer(canvas);
         }
 
@@ -374,7 +380,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             if(timerVoid > 0) {
                 canvas.drawBitmap(effectChroma, player.getxCoord()-player.getWidth()/2, player.getyCoord()-player.getHeight()/2, null);
             }
-
             canvas.restore();
         }
 

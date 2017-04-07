@@ -515,7 +515,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         }
                     }
 
-                    player.move(speedModifier, timeDelta, 0, gameScreen.getWidth(), 0, gameScreen.getHeight() - 200);
+                    player.move(speedModifier, timeDelta, 0, gameScreen.getWidth(), 0, gameScreen.getHeight() - 150);
                     for (int i = 0; i < gameObjects.size(); i++) {
                         gameObjects.get(i).move(speedModifier, timeDelta);
                     }
@@ -688,21 +688,21 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                     if(Math.floor(Math.random()*10) % 2 == 0) {
                         if(Math.floor(Math.random()*10) % 2 == 0) {
-                            temp.setxCoord(0);
+                            temp.setxCoord(25);
                             temp.setyCoord((float)Math.floor(Math.random()*gameScreen.getHeight()));
                         }
                         else {
-                            temp.setxCoord(gameScreen.getWidth()-50);
+                            temp.setxCoord(gameScreen.getWidth()-25);
                             temp.setyCoord((float)Math.floor(Math.random()*gameScreen.getHeight()));
                         }
                     }
                     else {
                         if(Math.floor(Math.random()*10) % 2 == 0) {
-                            temp.setyCoord(0);
+                            temp.setyCoord(25);
                             temp.setxCoord((float)Math.floor(Math.random()*gameScreen.getWidth()));
                         }
                         else {
-                            temp.setyCoord(gameScreen.getHeight()-250);
+                            temp.setyCoord(gameScreen.getHeight()-175);
                             temp.setxCoord((float)Math.floor(Math.random()*gameScreen.getWidth()));
                         }
                     }

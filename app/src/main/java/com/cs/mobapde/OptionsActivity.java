@@ -13,8 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
@@ -27,12 +30,17 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
     Context parent;
     RelativeLayout parentLayout;
     Button reset;
+
     int resetStatus;
+
+    Switch soundSwitch, musicSwitch;
+
     ScoresDataSource scoresDataSource;
+    OptionDataSource optionDataSource;
     MainActivity mainActivity;
+    ArrayList<Options> optionList;
 
-
-    public OptionsActivity(Context parent,View layout, RelativeLayout relativeLayout,int width, int height){
+    public OptionsActivity(Context parent, View layout, RelativeLayout relativeLayout, int width, int height, ArrayList<Options> optionList){
 
 
 
@@ -47,6 +55,7 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
         this.setElevation(24);
         this.setAnimationStyle(android.R.style.Animation_InputMethod);
 
+
         this.setTouchable(true);
         this.setOutsideTouchable(true);
         this.setTouchInterceptor(this);
@@ -58,11 +67,28 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
         this.resetStatus = 5;
 
         scoresDataSource = new ScoresDataSource(parent);
+        optionDataSource = new OptionDataSource(parent);
+
 
         layout.setOnTouchListener(this);
 
+        this.optionList = optionList;
 
 
+        this.musicSwitch = (Switch)layout.findViewById(R.id.switch_music);
+        if(optionList.get(0).isOn())
+            this.musicSwitch.setChecked(true);
+        else
+            this.musicSwitch.setChecked(false);
+        this.musicSwitch.setOnClickListener(this);
+
+        this.soundSwitch = (Switch)layout.findViewById(R.id.switch_sound);
+        if(optionList.get(1).isOn())
+            this.soundSwitch.setChecked(true);
+        else
+            this.soundSwitch.setChecked(false);
+
+        this.soundSwitch.setOnClickListener(this);
 
         //showAtLocation(relativeLayout,Gravity.CENTER,0,0);
 
@@ -87,6 +113,18 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
     public void onClick(View v) {
         if (v.equals(reset)&&resetStatus==5){
             Toast.makeText(parent,"Long Press Me.",Toast.LENGTH_SHORT).show();
+        }
+        if(v.equals(musicSwitch)){
+            this.optionDataSource.open();
+            if(musicSwitch.isChecked()){
+                this.optionList.get(0).setValue(1);
+                this.optionDataSource.updateOptionsByID(1,1);
+            }else {
+                this.optionList.get(0).setValue(0);
+                this.optionDataSource.updateOptionsByID(1,0);
+            }
+            this.mainActivity.updateSounds();
+            this.optionDataSource.close();
         }
     }
 

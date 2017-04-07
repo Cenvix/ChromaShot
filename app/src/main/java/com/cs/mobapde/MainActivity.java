@@ -88,6 +88,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setHighscore();
 
+
+        optionDataSource = new OptionDataSource(this);
+        optionDataSource.open();
+        optionsList = optionDataSource.initializeOptions();
+        optionDataSource.close();
+
         initiatePopUps();
 
         background = (ImageView) findViewById(R.id.background);
@@ -113,12 +119,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        });
 //        animator.start();
-        optionDataSource = new OptionDataSource(this);
-        optionsList = optionDataSource.initializeOptions();
 
-        
 
-        initSounds();
+
+        //initSounds();
 
     }
 
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         randBG();
         if(isPause)
         this.initSounds();
+
         isPause = true;
         //animator.start();
     }
@@ -198,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View optionLayout = (ViewGroup)inflater.inflate(R.layout.activity_options,null);
-        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height);
+        optionsActivity = new OptionsActivity(this,optionLayout,(RelativeLayout)findViewById(R.id.activity_main),width,height,optionsList);
 
 //        inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        View howToLayout = (ViewGroup)inflater.inflate(R.layout.activity_how_to,null);
@@ -210,5 +215,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        this.bgm = MediaPlayer.create(this,R.raw.bgm_laser_groove);
        this.bgm.setLooping(true);
        this.bgm.start();
+       updateSounds();
+   }
+
+   public void updateSounds(){
+//       optionDataSource.open();
+//       this.optionsList = optionDataSource.initializeOptions();
+//       optionDataSource.close();
+
+       if(this.optionsList.get(0).isOn()){
+           this.bgm.setVolume(1,1);
+       }else
+           this.bgm.setVolume(0,0);
    }
 }

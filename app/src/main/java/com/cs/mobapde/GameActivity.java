@@ -165,7 +165,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         startOrientation=null;
 
-        initSounds();
+        //initSounds();
     }
 
     @Override
@@ -563,18 +563,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         gameOver = true;
 
                     }
-                    if (gameOver) {
-                        isRunning = false;
-                        Intent i = new Intent(GameActivity.this, GameOverActivity.class);
-                        i.putExtra("score", score + "");
-                        startActivityForResult(i, 1);
-                    }
                 }
 
                 if(gameOver){
-                    isBGMStop=false;
                     isRunning=false;
-
                     Intent i = new Intent(GameActivity.this,GameOverActivity.class);
                     i.putExtra("score", score+"");
                     startActivityForResult(i,1);
@@ -593,7 +585,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void resume() {
-
             thread = new Thread(this);
             thread.start();
         }
@@ -620,6 +611,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
             spawnWaveTimer = 3;
             shotCooldown = (float)0.25;
 
+            powerupTimer = 10;
             timerSlow = 0;
             timerHaste = 0;
             timerVoid = 0;
@@ -670,12 +662,13 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         private void movePlayer(Float xVector, Float yVector) {
-            player.setxVector(xVector);
-            player.setyVector(yVector);
+            if(!gamePause) {
+                player.setxVector(xVector);
+                player.setyVector(yVector);
 
-            player.setRotation((float)Math.toDegrees(Math.atan2(yVector,xVector)));
+                player.setRotation((float) Math.toDegrees(Math.atan2(yVector, xVector)));
+            }
             //System.out.println(player.getRotation());
-
         }
 
         private void spawnTarget() {
@@ -722,7 +715,6 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         private void spawnPowerup() {
             if(powerupTimer <= 0) {
-                Log.v("POWERUPS", "SPAWN");
                 powerupTimer = 10;
                 Powerup temp = new Powerup(getResources(), gameScreen.getWidth(), gameScreen.getHeight());
                 gameObjects.add(temp);

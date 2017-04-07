@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,7 @@ public class OptionDataSource {
 
         String selection = DatabaseHelper.OPTION_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
-        
-        List<Options> options = new ArrayList<Options>();
+
         database.update(DatabaseHelper.TABLE_OPTIONS, values, selection, selectionArgs);
 
     }
@@ -86,12 +86,13 @@ public class OptionDataSource {
         for (Options opt : options) {
             if(opt.getId()==1){
                 foundMusic=true;
-                break;
+
             }
             if(opt.getId()==2){
                 foundSound=true;
-                break;
+
             }
+            Log.d("OPTIONS",opt.getId()+"");
         }
 
         if(!foundMusic){

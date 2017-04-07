@@ -15,9 +15,9 @@ public class Powerup extends GameObject{
     private Image img;
 
     public Powerup (Resources resources, int maxX, int maxY) {
-        width = 48;
-        height = 48;
-        radius = 24;
+        width = 64;
+        height = 64;
+        radius = 32;
 
         xCoord = new Random().nextFloat()*maxX;
         yCoord = new Random().nextFloat()*maxY-150;

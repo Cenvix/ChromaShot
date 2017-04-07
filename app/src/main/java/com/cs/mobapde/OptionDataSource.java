@@ -32,9 +32,9 @@ public class OptionDataSource {
         dbHelper.close();
     }
 
-    public void updateOptionsByID(int id, String option, int value){
+    public void updateOptionsByID(int id, int value){
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_OPTION,option);
+        values.put(DatabaseHelper.COLUMN_VALUE,value);
 
         String selection = DatabaseHelper.OPTION_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};

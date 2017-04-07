@@ -44,12 +44,81 @@ public class OptionDataSource {
 
     }
 
+    public Options addOptions(String name,int id, int value){
+
+            ContentValues values = new ContentValues();
+
+            values.put(DatabaseHelper.COLUMN_OPTION, name);
+            values.put(DatabaseHelper.OPTION_ID, id);
+            values.put(DatabaseHelper.COLUMN_VALUE, value);
+
+            long insertId = database.insert(DatabaseHelper.TABLE_OPTIONS, null, values);
+
+            Cursor cursor = database.query(DatabaseHelper.TABLE_OPTIONS, allColumns,
+                    DatabaseHelper.OPTION_ID + " = " + insertId, null, null, null, null);
+
+            cursor.moveToFirst();
+            Options newOptions = cursorToOption(cursor);
+            cursor.close();
+
+
+        return newOptions;
+
+
+    }
+
+    public List<Options> initializeOptions(){
+        List<Options> options = new ArrayList<Options>();
+
+        Cursor cursor = database.query(DatabaseHelper.TABLE_OPTIONS,allColumns, null, null,
+                null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            Options option = cursorToOption(cursor);
+            options.add(option);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        boolean foundSound=false;
+        boolean foundMusic=false;
+
+        for (Options opt : options) {
+            if(opt.getId()==1){
+                foundMusic=true;
+                break;
+            }
+            if(opt.getId()==2){
+                foundSound=true;
+                break;
+            }
+        }
+
+        if(!foundMusic){
+            //insert Music
+            options.add(addOptions("Music",1,1));
+            //options.add(new Music)
+        }
+        if(!foundSound){
+            //insert Sound
+            //options.add(new Sound)
+            options.add(addOptions("Sound",2,1));
+        }
+
+
+
+
+
+        return options;
+    }
+
     private Options cursorToOption(Cursor cursor) {
         Options options = new Options();
         options.setId(cursor.getInt(0));
         options.setOption(cursor.getString(1));
+        options.setValue(cursor.getInt(2));
 
-        System.out.println(cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3));
+//        System.out.println(cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3));
 
         return options;
     }

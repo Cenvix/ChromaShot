@@ -107,8 +107,10 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     Double vectorY;
 
 
-    MediaPlayer bgm;
+    MediaPlayer bgm,sfx;
     boolean isBGMStop = true;
+
+    boolean soundsOn, musicOn;
 
 
     @Override
@@ -117,6 +119,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_game);
 
 //        initializePopUps();
+
+
+        this.musicOn = getIntent().getBooleanExtra("music",false);
+        this.soundsOn = getIntent().getBooleanExtra("sounds",false);
+
 
         hideActionBar();//This hides actionbar
         initializeSensors();//For Accelerometer
@@ -460,6 +467,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                                 shots.add(temp);
 
                                 shotCooldown = (float) 0.25;
+
+                                playSFX(R.raw.sfx_gun);
                             }
 
                             if (shootGreen) {
@@ -469,6 +478,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                                 shots.add(temp);
 
                                 shotCooldown = (float) 0.25;
+
+                                playSFX(R.raw.sfx_gun);
                             }
 
                             if (shootBlue) {
@@ -478,6 +489,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                                 shots.add(temp);
 
                                 shotCooldown = (float) 0.25;
+
+                                playSFX(R.raw.sfx_gun);
                             }
                         }
                     }
@@ -490,14 +503,18 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         if (powerups.get(i).isDead()) {
                             if (powerups.get(i).getName().equals("shield")) {
                                 player.setHp(2);
+                                playSFX(R.raw.sfx_power_up_shield);
                             } else if (powerups.get(i).getName().equals("slow")) {
                                 timerSlow = 5;
                                 speedModifier = (float) 0.5;
+                                playSFX(R.raw.sfx_slow_down);
                             } else if (powerups.get(i).getName().equals("haste")) {
                                 timerHaste = 5;
                                 player.setSpeed(6000);
+                                playSFX(R.raw.sfx_power_up_speed);
                             } else if (powerups.get(i).getName().equals("void")) {
                                 timerVoid = 5;
+                                playSFX(R.raw.sfx_power_up_chroma);
                             }
 
                             gameObjects.remove(powerups.get(i));
@@ -540,6 +557,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         }
 
                         if (targets.get(i).isDead()) {
+                            playSFX(R.raw.sfx_kill);
                             score += 10 * spawnThresh;
                             gameObjects.remove(targets.get(i));
                             targets.remove(i);
@@ -559,7 +577,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 //                        }
 //                    }, 1000 );
 //                    pause();
-
+                        playSFX(R.raw.sfx_death);
                         gameOver = true;
 
                     }
@@ -567,6 +585,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
                 if(gameOver){
                     isRunning=false;
+                    isBGMStop = false;
                     Intent i = new Intent(GameActivity.this,GameOverActivity.class);
                     i.putExtra("score", score+"");
                     startActivityForResult(i,1);
@@ -861,8 +880,17 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
      */
 
     public void initSounds(){
-        this.bgm = MediaPlayer.create(this,R.raw.bgm_special_spotlight);
-        this.bgm.setLooping(true);
-        this.bgm.start();
+        if(this.musicOn) {
+            this.bgm = MediaPlayer.create(this, R.raw.bgm_special_spotlight);
+            this.bgm.setLooping(true);
+            this.bgm.start();
+        }
     }
+    public void playSFX(int id){
+        if(this.soundsOn){
+            this.sfx = MediaPlayer.create(this, id);
+            this.sfx.start();
+        }
+    }
+
 }

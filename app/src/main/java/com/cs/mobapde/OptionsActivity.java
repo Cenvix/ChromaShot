@@ -125,6 +125,21 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
             }
             this.mainActivity.updateSounds();
             this.optionDataSource.close();
+
+
+        }
+        if(v.equals(soundSwitch)){
+            this.optionDataSource.open();
+            if(soundSwitch.isChecked()){
+                this.optionList.get(1).setValue(1);
+                this.optionDataSource.updateOptionsByID(2,1);
+            }else {
+                this.optionList.get(1).setValue(0);
+                this.optionDataSource.updateOptionsByID(2,0);
+            }
+            this.mainActivity.updateSounds();
+            this.optionDataSource.close();
+            this.mainActivity.playSFX(R.raw.sfx_select);
         }
     }
 
@@ -135,6 +150,7 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
 
                 Toast.makeText(parent,"Long Press me "+resetStatus+" more times to reset.",Toast.LENGTH_SHORT).show();
                 resetStatus--;
+                this.mainActivity.playSFX(R.raw.sfx_select);
             }else if(resetStatus<=0){
                 scoresDataSource.open();
                 scoresDataSource.deleteAllScores();
@@ -142,7 +158,10 @@ public class OptionsActivity extends PopupWindow implements View.OnTouchListener
                 Toast.makeText(parent,"HighScores Reset!",Toast.LENGTH_SHORT).show();
                 resetStatus = 5;
                 mainActivity.setHighscore();
+                this.mainActivity.playSFX(R.raw.sfx_death);
             }
+
+
         }
         return false;
     }

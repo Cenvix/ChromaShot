@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ArrayList<Options> optionsList;
 
-    MediaPlayer bgm;
+    MediaPlayer bgm,sfx;
 
     boolean isPause =true;
 
@@ -170,13 +170,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            Intent intent = new Intent(MainActivity.this, OptionsActivity.class);
 //            startActivity(intent);
 
+            playSFX(R.raw.sfx_select);
             optionsActivity.show();
+
         }
         else if(view.equals(start)){
+            playSFX(R.raw.sfx_start);
             Intent intent = new Intent(MainActivity.this, GameActivity.class);
+            intent.putExtra("music",this.optionsList.get(0).isOn());
+            intent.putExtra("sounds",this.optionsList.get(1).isOn());
             this.startActivity(intent);
         } else if(view.equals(howTo)){
             isPause = false;
+            playSFX(R.raw.sfx_select);
             Intent intent = new Intent(MainActivity.this, HowToActivity.class);
             this.startActivity(intent);
         }
@@ -218,6 +224,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
        updateSounds();
    }
 
+   public void playSFX(int id){
+       if(this.optionsList.get(1).isOn()){
+           this.sfx = MediaPlayer.create(this, id);
+           this.sfx.start();
+       }
+   }
+
    public void updateSounds(){
 //       optionDataSource.open();
 //       this.optionsList = optionDataSource.initializeOptions();
@@ -227,5 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
            this.bgm.setVolume(1,1);
        }else
            this.bgm.setVolume(0,0);
+
+
    }
 }

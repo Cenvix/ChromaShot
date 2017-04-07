@@ -181,7 +181,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         pauseSensors();
 
-        if(isBGMStop)
+        if(musicOn&&isBGMStop)
         this.bgm.stop();
 
         isRunning = false;
@@ -195,6 +195,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 
         registerSensors();
 
+        startOrientation = null;
         if(isBGMStop)
             initSounds();
         isBGMStop = true;
@@ -214,10 +215,12 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     this.gameLogic.init();
                 }
                 else if(data.getStringExtra("result").equals("home")) {
+                    if(musicOn)
                     bgm.stop();
                     finish();
                 }
                 else{
+                    if(musicOn)
                     bgm.stop();
                     finish();
                 }
@@ -446,6 +449,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                         speedModifier = 1;
                     }
                     if (timerHaste <= 0) {
+                        //playSFX(R.raw.sfx_speed_up);
                         player.setSpeed(3000);
                     }
 
@@ -457,7 +461,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                             Shot temp = new Shot(getResources(), "chroma", player);
                             gameObjects.add(temp);
                             shots.add(temp);
-
+                            playSFX(R.raw.sfx_gun);
                             shotCooldown = (float) 0.25;
                         } else {
                             if (shootRed) {
@@ -552,9 +556,9 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     for (int i = 0; i < targets.size(); i++) {
-                        if (checkOutOfBounds(targets.get(i))) {
-                            targets.get(i).decrementHp();
-                        }
+//                        if (checkOutOfBounds(targets.get(i))) {
+//                            targets.get(i).decrementHp();
+//                        }
 
                         if (targets.get(i).isDead()) {
                             playSFX(R.raw.sfx_kill);
@@ -609,7 +613,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         }
 
         public void init() {
-            startOrientation = null;
+
             score = 0;
             gameObjects = new ArrayList<>();
             targets = new ArrayList<>();

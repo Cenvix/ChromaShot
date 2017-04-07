@@ -12,10 +12,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity
@@ -30,9 +27,15 @@
         </activity>
         <activity
             android:name=".HowToActivity"
-            android:theme="@style/AppTheme.CustomPopTheme"
-            >
+            android:theme="@style/AppTheme.CustomPopTheme">
 
+        </activity>
+        <activity
+            android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

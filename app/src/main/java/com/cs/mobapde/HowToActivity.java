@@ -19,6 +19,9 @@ import android.widget.TextView;
 public class HowToActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
 
+    Button closeBtn;
+    MainActivity mainActivity;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +29,15 @@ public class HowToActivity extends AppCompatActivity implements View.OnTouchList
 
         hideActionBar();
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        getWindow().setLayout((int)Math.round(dm.widthPixels*.8),(int)Math.round(dm.heightPixels*.8));
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        getWindow().setLayout((int)Math.round(dm.widthPixels*.8),(int)Math.round(dm.heightPixels*.8));
 
 
+        closeBtn = (Button)findViewById(R.id.close_button);
+        this.closeBtn.setOnClickListener(this);
+
+        mainActivity = (MainActivity)getParent();
     }
 
     @Override
@@ -44,21 +51,24 @@ public class HowToActivity extends AppCompatActivity implements View.OnTouchList
         if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
             finish();
         }
-        finish();
+
         return false;
 
     }
 
     @Override
     public void onClick(View v) {
+        if(v.equals(closeBtn)){
 
-
+            finish();
+        }
     }
     public void hideActionBar(){
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
+
 
     }
 }

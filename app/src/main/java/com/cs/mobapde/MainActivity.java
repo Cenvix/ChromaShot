@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     boolean isPause =true;
 
+    boolean isBGChange = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +123,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        animator.start();
 
 
+        final Handler handler = new Handler();
 
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(isBGChange){
+                    randBG();
+                    handler.postDelayed(this,1000);
+                }
+            }
+        };
+
+        handler.postDelayed(runnable,1000);
         //initSounds();
 
     }
@@ -242,5 +256,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
            this.bgm.setVolume(0,0);
 
 
+   }
+
+   public void muteBGM(){
+       this.bgm.setVolume(0,0);
+   }
+   public void unMuteBGM(){
+       this.bgm.setVolume(0,0);
    }
 }

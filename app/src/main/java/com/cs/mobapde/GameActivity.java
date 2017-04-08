@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorEventListener;
 import android.media.MediaPlayer;
@@ -65,7 +67,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     float timerHaste = 0;
     float timerVoid = 0;
 
-    float score = 0;
+    int score = 0;
 
     boolean shootRed;
     boolean shootGreen;
@@ -88,6 +90,8 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
     Bitmap effectShield;
     Bitmap effectChroma;
     Bitmap effectSlow;
+
+    Paint textPaint;
 
     /* Accelorometer Stuff*/
     Sensor accelerometer;
@@ -146,6 +150,14 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         pause = new CanvasButton(getResources(), "pause", 150);
         resume = new CanvasButton(getResources(), "resume", 150);
         home = new CanvasButton(getResources(), "home", 150);
+
+        textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(128);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setStrokeWidth(1);
+        textPaint.setAlpha(50);
+        textPaint.setTextAlign(Paint.Align.CENTER);
 
         gameLogic = new GameLogic();
         gameScreen = new GameScreen(this);
@@ -360,6 +372,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
         public void render(Canvas canvas) {
             canvas.drawARGB(255, 255, 255, 255);
             canvas.drawBitmap(bg, 0, 0, null);
+            canvas.drawText(""+score, canvas.getWidth()/2, canvas.getHeight()/2, textPaint);
 
             for(int i = 0; i < gameObjects.size(); i++) {
                 canvas.drawBitmap(gameObjects.get(i).getSprite(), gameObjects.get(i).getxCoord() - gameObjects.get(i).getWidth()/2, gameObjects.get(i).getyCoord() - gameObjects.get(i).getHeight()/2, null);
